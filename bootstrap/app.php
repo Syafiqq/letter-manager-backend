@@ -65,7 +65,9 @@ $app->middleware([
 
 $app->routeMiddleware([
     //'auth' => App\Http\Middleware\Authenticate::class,
-    'guest' => App\Http\Middleware\GuestMiddleware::class
+    'guest' => App\Http\Middleware\GuestMiddleware::class,
+    'registered.role' => App\Http\Middleware\RegisteredRoleMiddleware::class,
+    'c.jwt.auth' => App\Http\Middleware\JWTAuthenticateMiddleware::class
 ]);
 
 /*
