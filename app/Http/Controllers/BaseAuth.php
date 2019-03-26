@@ -59,7 +59,7 @@ abstract class BaseAuth extends Controller
             return $response;
         }
         $session              = new Session();
-        $session->{'id'}      = Uuid::uuid4()->toString();
+        $session->{'id'}      = Uuid::uuid1()->toString();
         $session->{'session'} = json_encode([]);
         $user->session()->save($session);
 
