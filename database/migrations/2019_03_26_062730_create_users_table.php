@@ -39,7 +39,7 @@ class CreateUsersTable extends Migration
                 $table->string('email', 100)->nullable();
                 $table->string('name', 100);
                 $table->enum('gender', ['male', 'female']);
-                $table->enum('role', ['student', 'counselor']);
+                $table->enum('role', ['student']);
                 $table->uuid('stamp');
                 $table->string('avatar', 100)->nullable();
                 $table->string('password', 60);
