@@ -25,6 +25,22 @@ class UuidTest extends TestCase
         }
     }
 
+    public function testUuid4()
+    {
+        $this->assertTrue(true);
+        foreach (range(0, 100) as $_)
+        {
+            try
+            {
+                echo \Ramsey\Uuid\Uuid::uuid4()->toString() . "\n";
+            }
+            catch (Exception $e)
+            {
+                echo $e->getMessage();
+            }
+        }
+    }
+
 }
 
 ?>
