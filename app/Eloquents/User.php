@@ -30,14 +30,26 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     /**
      * @var array
      */
-    protected $guarded = ['id', 'credential', 'role', 'password', 'remember_token', 'created_at', 'updated_at'];
+    protected $guarded = [
+        'id',
+        'credential',
+        'role',
+        'stamp',
+        'password',
+        'remember_token',
+        'created_at',
+        'updated_at'
+    ];
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'gender', 'avatar'
+        'name',
+        'email',
+        'gender',
+        'avatar'
     ];
     /**
      * The attributes excluded from the model's JSON form.
@@ -45,7 +57,8 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token'
+        'password',
+        'remember_token'
     ];
     /**
      * @var string
