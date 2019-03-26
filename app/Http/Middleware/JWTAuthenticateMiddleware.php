@@ -39,10 +39,12 @@ class JWTAuthenticateMiddleware extends \Tymon\JWTAuth\Http\Middleware\Authentic
      */
     public function handle($request, Closure $next)
     {
+        $role = strtolower($this->role);
+
         $this->authenticate($request);
         /** @var Payload $payload */
         $payload = $this->auth->getPayload();
-        if ($payload->get(ClaimTable::ROLE) != $this->role)
+        if ($payload->get(ClaimTable::ROLE) != $role)
         {
             return response()->json(PopoMapper::alertResponse(HttpStatus::FORBIDDEN, 'Unknown User'), HttpStatus::FORBIDDEN);
         }
