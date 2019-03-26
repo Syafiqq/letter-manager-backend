@@ -20,6 +20,7 @@
     "vlucas/phpdotenv": "^3.3",
     "ext-json": "*",
     "ext-libsodium": "*",
+    "ext-openssl": "*",
     "ext-uuid": "*"
   },
   "require-dev": {
