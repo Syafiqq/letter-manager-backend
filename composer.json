@@ -19,9 +19,7 @@
     "tymon/jwt-auth": "^1.0.0-rc.4.1",
     "vlucas/phpdotenv": "^3.3",
     "ext-json": "*",
-    "ext-libsodium": "*",
-    "ext-openssl": "*",
-    "ext-uuid": "*"
+    "ext-openssl": "*"
   },
   "require-dev": {
     "fzaninotto/faker": "^1.4",
