@@ -18,7 +18,6 @@ use Tymon\JWTAuth\Payload;
 
 class JWTAuthenticateMiddleware extends \Tymon\JWTAuth\Http\Middleware\Authenticate
 {
-    protected $role;
     protected $auth;
 
     public function __construct(\Tymon\JWTAuth\JWTAuth $auth)
@@ -32,14 +31,15 @@ class JWTAuthenticateMiddleware extends \Tymon\JWTAuth\Http\Middleware\Authentic
      *
      * @param  \Illuminate\Http\Request $request
      * @param  \Closure $next
+     * @param  string $role
      *
      * @throws \Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException
      *
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle($request, Closure $next, $role)
     {
-        $role = strtolower($this->role);
+        $role = strtolower($role);
 
         $this->authenticate($request);
         /** @var Payload $payload */
