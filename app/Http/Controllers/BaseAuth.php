@@ -13,23 +13,27 @@ namespace App\Http\Controllers;
 use App\Eloquents\Session;
 use App\Eloquents\User;
 use App\Model\Popo\PopoMapper;
+use App\Model\Util\ClaimTable;
 use App\Model\Util\HttpStatus;
 use Illuminate\Hashing\HashManager;
 use Illuminate\Http\Request;
 use Ramsey\Uuid\Uuid;
 use Tymon\JWTAuth\Factory;
+use Tymon\JWTAuth\JWTAuth;
 use Tymon\JWTAuth\Token;
 
 abstract class BaseAuth extends Controller
 {
     protected $role;
     private $jwtFactory;
+    private $jwtAuth;
     private $hashManager;
 
-    public function __construct(Factory $factory, HashManager $hashManager)
+    public function __construct(Factory $factory, HashManager $hashManager, JWTAuth $jwtAuth)
     {
         $this->jwtFactory  = $factory;
         $this->hashManager = $hashManager;
+        $this->jwtAuth     = $jwtAuth;
     }
 
     /**
@@ -77,6 +81,29 @@ abstract class BaseAuth extends Controller
             'type' => 'bearer',
             'expires' => $this->jwtFactory->getTTL()
         ]), HttpStatus::OK);
+    }
+
+    /**
+     * @param User $user
+     * @param Session $session
+     * @return mixed
+     */
+    protected function jwt(User $user, Session $session)
+    {
+        $claims = [
+            ClaimTable::AUDIENCE => 'k3f', //Audience of the token
+            ClaimTable::ISSUER => url("/{$this->role}/auth/login"), // Issuer of the token
+            ClaimTable::SUBJECT => $user->{'id'}, // Subject of the token
+            ClaimTable::ISSUED_AT => time(), // Time when JWT was issued.
+            ClaimTable::EXPIRATION => time() + 60 * 60, // Expiration time
+            ClaimTable::AUTH_STAMP => $user->{'stamp'},
+            ClaimTable::SESSION => $session->{'id'},
+            ClaimTable::ROLE => $user->{'role'},
+        ];
+
+        $payload = $this->jwtFactory->customClaims($claims)->make();
+
+        return $this->jwtAuth->manager()->encode($payload);
     }
 }
 
