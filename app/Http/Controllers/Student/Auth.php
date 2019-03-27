@@ -7,6 +7,12 @@ use Tymon\JWTAuth\JWTAuth;
 
 class Auth extends BaseAuth
 {
+    /**
+     * Auth constructor.
+     * @param Factory $factory
+     * @param HashManager $hashManager
+     * @param JWTAuth $jwtAuth
+     */
     public function __construct(Factory $factory, HashManager $hashManager, JWTAuth $jwtAuth)
     {
         parent::__construct($factory, $hashManager, $jwtAuth);

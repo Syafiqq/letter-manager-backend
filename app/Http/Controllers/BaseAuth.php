@@ -29,6 +29,12 @@ abstract class BaseAuth extends Controller
     private $jwtAuth;
     private $hashManager;
 
+    /**
+     * BaseAuth constructor.
+     * @param Factory $factory
+     * @param HashManager $hashManager
+     * @param JWTAuth $jwtAuth
+     */
     public function __construct(Factory $factory, HashManager $hashManager, JWTAuth $jwtAuth)
     {
         $this->jwtFactory  = $factory;
