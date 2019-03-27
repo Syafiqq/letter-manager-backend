@@ -15,7 +15,7 @@ use App\Eloquents\User;
 use App\Model\Popo\PopoMapper;
 use App\Model\Util\ClaimTable;
 use App\Model\Util\HttpStatus;
-use Illuminate\Hashing\HashManager;
+use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Http\Request;
 use Ramsey\Uuid\Uuid;
 use Tymon\JWTAuth\Factory;
@@ -30,12 +30,12 @@ abstract class BaseAuth extends Controller
     private $hashManager;
 
     /**
-     * BaseAuth constructor.
+     * Auth constructor.
      * @param Factory $factory
-     * @param HashManager $hashManager
+     * @param Hasher $hashManager
      * @param JWTAuth $jwtAuth
      */
-    public function __construct(Factory $factory, HashManager $hashManager, JWTAuth $jwtAuth)
+    public function __construct(Factory $factory, Hasher $hashManager, JWTAuth $jwtAuth)
     {
         $this->jwtFactory  = $factory;
         $this->hashManager = $hashManager;
