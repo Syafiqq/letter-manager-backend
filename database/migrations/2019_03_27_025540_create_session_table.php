@@ -59,9 +59,9 @@ class CreateSessionTable extends Migration
     {
         if ($this->schema->hasTable(self::$tableName))
         {
-            $this->schema->table(self::$tableName, function (Blueprint $table) {
-                $table->dropForeign('sessions_issuer_foreign');
-            });
+//            $this->schema->table(self::$tableName, function (Blueprint $table) {
+//                $table->dropForeign('sessions_issuer_foreign');
+//            });
         }
         else
         {
