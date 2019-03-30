@@ -11,7 +11,8 @@ use App\Model\Util\HttpStatus;
  */
 class LoginTest extends ControllerTestCase
 {
-    private static $provider;
+    private static $repos;
+
     /**
      * LoginTest constructor.
      */
@@ -147,6 +148,16 @@ class LoginTest extends ControllerTestCase
             ]);
 
         return json_decode($this->response->content(), true);
+    }
+
+    private function _getUserRepository()
+    {
+        if (self::$repos == null)
+        {
+            self::$repos = \App\Eloquents\User::all();
+        }
+
+        return self::$repos;
     }
 }
 
