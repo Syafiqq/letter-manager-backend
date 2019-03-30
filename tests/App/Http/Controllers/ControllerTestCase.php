@@ -40,7 +40,7 @@ class ControllerTestCase extends TestCase
      * @param array $cookies The request cookies ($_COOKIE)
      * @param array $files The request files ($_FILES)
      * @param array $server The server parameters ($_SERVER)
-     * @param string|resource|null $content The raw body data
+     * @param string|resource|array|null $content The raw body data
      *
      * @return \Illuminate\Http\Request
      */
