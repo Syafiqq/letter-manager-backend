@@ -14,7 +14,7 @@ class AuthTest extends ControllerTestCase
         'ACCEPT' => 'application/json'
     ];
 
-    public function testLogin()
+    public function testLoginWithEmptyData()
     {
         $this->expectException(\Illuminate\Validation\ValidationException::class);
 
