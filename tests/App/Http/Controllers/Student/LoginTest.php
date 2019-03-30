@@ -83,6 +83,38 @@ class LoginTest extends ControllerTestCase
             ]);
     }
 
+    public function test_it_should_respond_ok_given_valid_data()
+    {
+        /** @var $response */
+        $this->json('POST', $this->getRoute(),
+            [
+                'credential' => '10001',
+                'password' => '12345678'
+            ],
+            $this->getHeaders())
+            ->seeJson([
+                'code' => HttpStatus::OK,
+            ]);
+    }
+
+    public function test_it_should_not_access_login_page_again()
+    {
+        /** @var array $token */
+        $token = $this->doAuth();
+        $this->json('POST', $this->getRoute(),
+            [
+                'credential' => '10001',
+                'password' => '12345678'
+            ],
+            array_merge($this->getHeaders(), [
+                'Authorization' => "Bearer {$token['data']['token']}"
+            ]))
+            ->seeJson([
+                'code' => HttpStatus::FORBIDDEN,
+            ]);
+    }
+
+
     private function getRoute()
     {
         return path_route('student.auth.login.post');
@@ -94,6 +126,26 @@ class LoginTest extends ControllerTestCase
             'Content-Type' => 'application/json',
             'Accept' => 'application/json',
         ];
+    }
+
+    /**
+     * @param null $creds
+     * @return array
+     */
+    private function doAuth($creds = null)
+    {
+        /** @var $response */
+        $this->json('POST', $this->getRoute(),
+            $creds == null ? [
+                'credential' => '10001',
+                'password' => '12345678'
+            ] : $creds,
+            $this->getHeaders())
+            ->seeJson([
+                'code' => HttpStatus::OK,
+            ]);
+
+        return json_decode($this->response->content(), true);
     }
 }
 
