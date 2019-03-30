@@ -11,6 +11,7 @@ use App\Model\Util\HttpStatus;
  */
 class LoginTest extends ControllerTestCase
 {
+    private static $provider;
     /**
      * LoginTest constructor.
      */
@@ -26,7 +27,7 @@ class LoginTest extends ControllerTestCase
         $route      = route('student.auth.login.post', []);
         $path_route = str_replace($domain, '', $route);
         $this->assertEquals($path_route, path_route('student.auth.login.post'));
-        $this->assertEquals($path_route, $this->getRoute());
+        $this->assertEquals($path_route, $this->_getRoute());
     }
 
     /**
@@ -39,7 +40,7 @@ class LoginTest extends ControllerTestCase
         $request = $this->createJsonRequest(
             'POST',
             null,
-            $this->getRoute()
+            $this->_getRoute()
         );
         /** @var \App\Http\Controllers\Student\Auth $controller */
         $controller = $this->app->make(\App\Http\Controllers\Student\Auth::class);
@@ -61,7 +62,7 @@ class LoginTest extends ControllerTestCase
                 'password' => '12345678',
                 'role' => 'student'
             ],
-            $this->getRoute()
+            $this->_getRoute()
         );
         $controller = $this->app->make(\App\Http\Controllers\Student\Auth::class);
 
@@ -77,7 +78,7 @@ class LoginTest extends ControllerTestCase
     public function test_it_should_respond_unprocessable_entity_given_no_data()
     {
         /** @var $response */
-        $this->json('POST', $this->getRoute(), [], $this->getHeaders())
+        $this->json('POST', $this->_getRoute(), [], $this->_getHeaders())
             ->seeJson([
                 'code' => HttpStatus::UNPROCESSABLE_ENTITY,
             ]);
@@ -86,12 +87,12 @@ class LoginTest extends ControllerTestCase
     public function test_it_should_respond_ok_given_valid_data()
     {
         /** @var $response */
-        $this->json('POST', $this->getRoute(),
+        $this->json('POST', $this->_getRoute(),
             [
                 'credential' => '10001',
                 'password' => '12345678'
             ],
-            $this->getHeaders())
+            $this->_getHeaders())
             ->seeJson([
                 'code' => HttpStatus::OK,
             ]);
@@ -100,13 +101,13 @@ class LoginTest extends ControllerTestCase
     public function test_it_should_not_access_login_page_again()
     {
         /** @var array $token */
-        $token = $this->doAuth();
-        $this->json('POST', $this->getRoute(),
+        $token = $this->_doAuth();
+        $this->json('POST', $this->_getRoute(),
             [
                 'credential' => '10001',
                 'password' => '12345678'
             ],
-            array_merge($this->getHeaders(), [
+            array_merge($this->_getHeaders(), [
                 'Authorization' => "Bearer {$token['data']['token']}"
             ]))
             ->seeJson([
@@ -115,12 +116,12 @@ class LoginTest extends ControllerTestCase
     }
 
 
-    private function getRoute()
+    private function _getRoute()
     {
         return path_route('student.auth.login.post');
     }
 
-    private function getHeaders()
+    private function _getHeaders()
     {
         return [
             'Content-Type' => 'application/json',
@@ -132,15 +133,15 @@ class LoginTest extends ControllerTestCase
      * @param null $creds
      * @return array
      */
-    private function doAuth($creds = null)
+    private function _doAuth($creds = null)
     {
         /** @var $response */
-        $this->json('POST', $this->getRoute(),
+        $this->json('POST', $this->_getRoute(),
             $creds == null ? [
                 'credential' => '10001',
                 'password' => '12345678'
             ] : $creds,
-            $this->getHeaders())
+            $this->_getHeaders())
             ->seeJson([
                 'code' => HttpStatus::OK,
             ]);
