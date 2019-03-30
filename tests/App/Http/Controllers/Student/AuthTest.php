@@ -40,8 +40,13 @@ class AuthTest extends ControllerTestCase
 
         $response = $controller->postLogin($request);
         $this->assertEquals(200, $response->status());
-
+        $data = $response->getData(true);
+        $this->assertArrayHasKey('token', $data['data']);
+        $this->assertArrayHasKey('type', $data['data']);
+        $this->assertArrayHasKey('expires', $data['data']);
         $this->assertNotNull($controller);
+        echo ve($data);
+
     }
 }
 
