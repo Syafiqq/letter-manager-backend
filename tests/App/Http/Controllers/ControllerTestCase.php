@@ -66,7 +66,7 @@ class ControllerTestCase extends TestCase
             $content = [$content];
         }
 
-        return $this->createRequest($method, $content, $uri, $server, $parameters, $cookies, $files);
+        return $this->createRequest($method, json_encode($content), $uri, $server, $parameters, $cookies, $files);
     }
 }
 
