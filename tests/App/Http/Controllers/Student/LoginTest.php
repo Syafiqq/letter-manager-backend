@@ -1,4 +1,7 @@
 <?php
+
+use App\Model\Util\HttpStatus;
+
 /**
  * This <letter-manager-backend> project created by :
  * Name         : syafiq
@@ -6,27 +9,24 @@
  * Email        : syafiq.rezpector@gmail.com
  * Github       : syafiqq
  */
-
 class LoginTest extends ControllerTestCase
 {
-
-    private $route;
-
     /**
      * LoginTest constructor.
      */
     public function __construct()
     {
         parent::__construct();
-        $this->route = path_route('student.auth.login.post');
     }
 
     public function test_get_login_path()
     {
+        $this->assertTrue(true);
         $domain     = env('APP_URL');
         $route      = route('student.auth.login.post', []);
         $path_route = str_replace($domain, '', $route);
         $this->assertEquals($path_route, path_route('student.auth.login.post'));
+        $this->assertEquals($path_route, $this->getRoute());
     }
 
     /**
@@ -36,10 +36,10 @@ class LoginTest extends ControllerTestCase
     {
         $this->expectException(\Illuminate\Validation\ValidationException::class);
 
-        $request    = $this->createJsonRequest(
+        $request = $this->createJsonRequest(
             'POST',
             null,
-            $this->route
+            $this->getRoute()
         );
         /** @var \App\Http\Controllers\Student\Auth $controller */
         $controller = $this->app->make(\App\Http\Controllers\Student\Auth::class);
@@ -61,17 +61,39 @@ class LoginTest extends ControllerTestCase
                 'password' => '12345678',
                 'role' => 'student'
             ],
-            $this->route
+            $this->getRoute()
         );
         $controller = $this->app->make(\App\Http\Controllers\Student\Auth::class);
 
         $response = $controller->postLogin($request);
-        $this->assertEquals(200, $response->status());
+        $this->assertEquals(HttpStatus::OK, $response->status());
         $data = $response->getData(true);
         $this->assertArrayHasKey('token', $data['data']);
         $this->assertArrayHasKey('type', $data['data']);
         $this->assertArrayHasKey('expires', $data['data']);
         $this->assertNotNull($controller);
+    }
+
+    public function test_it_should_respond_unprocessable_entity_given_no_data()
+    {
+        /** @var $response */
+        $this->json('POST', $this->getRoute(), [], $this->getHeaders())
+            ->seeJson([
+                'code' => HttpStatus::UNPROCESSABLE_ENTITY,
+            ]);
+    }
+
+    private function getRoute()
+    {
+        return path_route('student.auth.login.post');
+    }
+
+    private function getHeaders()
+    {
+        return [
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ];
     }
 }
 
