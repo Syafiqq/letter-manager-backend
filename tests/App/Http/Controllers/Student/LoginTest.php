@@ -101,6 +101,21 @@ class LoginTest extends ControllerTestCase
             ]);
     }
 
+    public function test_it_should_respond_not_found_given_invalid_data()
+    {
+        $actual = $this->_getUserRepository()->take(1)->first();
+        /** @var $response */
+        $this->json('POST', $this->_getRoute(),
+            [
+                'credential' => $actual->{'credential'},
+                'password' => $this->_getAWrongPassword(),
+            ],
+            $this->_getHeaders())
+            ->seeJson([
+                'code' => HttpStatus::NOT_FOUND,
+            ]);
+    }
+
     public function test_it_should_not_access_login_page_again()
     {
         $actual = $this->_getUserRepository()->take(1)->first();
