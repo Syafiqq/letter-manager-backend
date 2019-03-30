@@ -9,6 +9,18 @@
 
 class LoginTest extends ControllerTestCase
 {
+
+    private $route;
+
+    /**
+     * LoginTest constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->route = path_route('student.auth.login.post');
+    }
+
     public function test_get_login_path()
     {
         $domain     = env('APP_URL');
@@ -24,7 +36,7 @@ class LoginTest extends ControllerTestCase
         $request    = $this->createJsonRequest(
             'POST',
             null,
-            '/student/auth/login'
+            $this->route
         );
         $controller = $this->app->make(\App\Http\Controllers\Student\Auth::class);
 
@@ -42,7 +54,7 @@ class LoginTest extends ControllerTestCase
                 'password' => '12345678',
                 'role' => 'student'
             ],
-            '/student/auth/login'
+            $this->route
         );
         $controller = $this->app->make(\App\Http\Controllers\Student\Auth::class);
 
@@ -53,8 +65,6 @@ class LoginTest extends ControllerTestCase
         $this->assertArrayHasKey('type', $data['data']);
         $this->assertArrayHasKey('expires', $data['data']);
         $this->assertNotNull($controller);
-        echo ve($data);
-
     }
 }
 
