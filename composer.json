@@ -31,7 +31,8 @@
   "autoload": {
     "files": [
       "app/Helpers/jHelpers.php",
-      "app/Helpers/gHelper.php"
+      "app/Helpers/gHelper.php",
+      "app/Helpers/routeHelper.php"
     ],
     "classmap": [
       "database/seeds",
