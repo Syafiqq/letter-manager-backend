@@ -7,7 +7,7 @@
  * Github       : syafiqq
  */
 
-class AuthTest extends ControllerTestCase
+class LoginTest extends ControllerTestCase
 {
     public function testLoginWithEmptyData()
     {
