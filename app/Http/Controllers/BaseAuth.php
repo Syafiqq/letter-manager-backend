@@ -49,7 +49,7 @@ abstract class BaseAuth extends Controller
      */
     public function postLogin(Request $request)
     {
-        $response = response()->json(PopoMapper::alertResponse(HttpStatus::UNAUTHORIZED, 'Unknown User'), HttpStatus::UNAUTHORIZED);
+        $response = response()->json(PopoMapper::alertResponse(HttpStatus::NOT_FOUND, 'Unknown User'), HttpStatus::UNAUTHORIZED);
 
         $credentials = $this->validate($request, [
             'credential' => 'bail|required|max:100',

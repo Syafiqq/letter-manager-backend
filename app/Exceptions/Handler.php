@@ -63,7 +63,7 @@ class Handler extends ExceptionHandler
                     return response()->json(PopoMapper::jsonResponse($statusCode, strlen($exception->getMessage()) < 1 ? 'Invalid Data' : $exception->getMessage(), $exception->errors(), [], ['Invalid form request']), $statusCode);
                 case AuthorizationException::class :
                     /** @var AuthorizationException $exception */
-                    return response()->json(PopoMapper::alertResponse(HttpStatus::FORBIDDEN, strlen($exception->getMessage()) < 1 ? 'Unknown Request' : $exception->getMessage()), HttpStatus::FORBIDDEN);
+                    return response()->json(PopoMapper::alertResponse(HttpStatus::NOT_FOUND, strlen($exception->getMessage()) < 1 ? 'Unknown Request' : $exception->getMessage()), HttpStatus::FORBIDDEN);
                 default :
                     return response()->json(PopoMapper::alertResponse($statusCode, strlen($exception->getMessage()) < 1 ? 'Unknown Request' : $exception->getMessage()), $statusCode);
             }
