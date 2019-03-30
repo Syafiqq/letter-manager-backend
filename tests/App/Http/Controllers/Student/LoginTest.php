@@ -29,6 +29,9 @@ class LoginTest extends ControllerTestCase
         $this->assertEquals($path_route, path_route('student.auth.login.post'));
     }
 
+    /**
+     * @throws Exception
+     */
     public function test_login_with_empty_data()
     {
         $this->expectException(\Illuminate\Validation\ValidationException::class);
@@ -38,6 +41,7 @@ class LoginTest extends ControllerTestCase
             null,
             $this->route
         );
+        /** @var \App\Http\Controllers\Student\Auth $controller */
         $controller = $this->app->make(\App\Http\Controllers\Student\Auth::class);
 
         $controller->postLogin($request);
@@ -45,6 +49,9 @@ class LoginTest extends ControllerTestCase
         $this->assertNotNull($controller);
     }
 
+    /**
+     * @throws Exception
+     */
     public function test_login_with_right_data()
     {
         $request    = $this->createJsonRequest(
