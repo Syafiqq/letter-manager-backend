@@ -82,7 +82,7 @@ abstract class BaseAuth extends Controller
      */
     protected function respondWithToken(Token $token)
     {
-        return response()->json(PopoMapper::alertResponse(HttpStatus::OK, 'Login Sukses', [
+        return response()->json(PopoMapper::alertResponse(HttpStatus::OK, 'Login Success', [
             'token' => $token->get(),
             'type' => 'bearer',
             'expires' => $this->jwtFactory->getTTL()
