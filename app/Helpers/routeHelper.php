@@ -22,7 +22,7 @@ if (!function_exists('path_route'))
         $domain = env('APP_URL');
         if ($secure == true)
         {
-            str_replace('http', 'https', $domain);
+            $domain = str_replace('http', 'https', $domain);
         }
         $route = app('url')->route($name, $parameters, $secure);
 
