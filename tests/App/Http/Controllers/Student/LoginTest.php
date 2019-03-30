@@ -56,11 +56,12 @@ class LoginTest extends ControllerTestCase
      */
     public function test_login_with_right_data()
     {
+        $actual     = $this->_getUserRepository()->take(1)->first();
         $request    = $this->createJsonRequest(
             'POST',
             [
-                'credential' => '10001',
-                'password' => '12345678',
+                'credential' => $actual->{'credential'},
+                'password' => $this->_getARightPassword(),
                 'role' => 'student'
             ],
             $this->_getRoute()
@@ -87,11 +88,12 @@ class LoginTest extends ControllerTestCase
 
     public function test_it_should_respond_ok_given_valid_data()
     {
+        $actual = $this->_getUserRepository()->take(1)->first();
         /** @var $response */
         $this->json('POST', $this->_getRoute(),
             [
-                'credential' => '10001',
-                'password' => '12345678'
+                'credential' => $actual->{'credential'},
+                'password' => $this->_getARightPassword(),
             ],
             $this->_getHeaders())
             ->seeJson([
@@ -101,12 +103,16 @@ class LoginTest extends ControllerTestCase
 
     public function test_it_should_not_access_login_page_again()
     {
+        $actual = $this->_getUserRepository()->take(1)->first();
         /** @var array $token */
-        $token = $this->_doAuth();
+        $token = $this->_doAuth([
+            'credential' => $actual->{'credential'},
+            'password' => $this->_getARightPassword(),
+        ]);
         $this->json('POST', $this->_getRoute(),
             [
-                'credential' => '10001',
-                'password' => '12345678'
+                'credential' => $actual->{'credential'},
+                'password' => $this->_getARightPassword(),
             ],
             array_merge($this->_getHeaders(), [
                 'Authorization' => "Bearer {$token['data']['token']}"
@@ -134,14 +140,11 @@ class LoginTest extends ControllerTestCase
      * @param null $creds
      * @return array
      */
-    private function _doAuth($creds = null)
+    private function _doAuth(array $creds)
     {
         /** @var $response */
         $this->json('POST', $this->_getRoute(),
-            $creds == null ? [
-                'credential' => '10001',
-                'password' => '12345678'
-            ] : $creds,
+            $creds,
             $this->_getHeaders())
             ->seeJson([
                 'code' => HttpStatus::OK,
