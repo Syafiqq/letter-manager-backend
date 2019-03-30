@@ -159,6 +159,16 @@ class LoginTest extends ControllerTestCase
 
         return self::$repos;
     }
+
+    private function _getARightPassword()
+    {
+        return '12345678';
+    }
+
+    private function _getAWrongPassword()
+    {
+        return '123456789';
+    }
 }
 
 ?>
