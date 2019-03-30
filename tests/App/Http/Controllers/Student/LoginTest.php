@@ -9,7 +9,7 @@
 
 class LoginTest extends ControllerTestCase
 {
-    public function testLoginWithEmptyData()
+    public function test_login_with_empty_data()
     {
         $this->expectException(\Illuminate\Validation\ValidationException::class);
 
@@ -25,7 +25,7 @@ class LoginTest extends ControllerTestCase
         $this->assertNotNull($controller);
     }
 
-    public function testLoginWithRightData()
+    public function test_login_with_right_data()
     {
         $request    = $this->createJsonRequest(
             'POST',
