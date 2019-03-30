@@ -9,6 +9,14 @@
 
 class LoginTest extends ControllerTestCase
 {
+    public function test_get_login_path()
+    {
+        $this->assertTrue(true);
+        $domain = env('APP_URL');
+        $route  = route('student.auth.login.post', []);
+        echo str_replace($domain, '', $route);
+    }
+
     public function test_login_with_empty_data()
     {
         $this->expectException(\Illuminate\Validation\ValidationException::class);
