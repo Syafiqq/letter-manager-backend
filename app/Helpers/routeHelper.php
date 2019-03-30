@@ -20,7 +20,7 @@ if (!function_exists('path_route'))
     function path_route($name, $parameters = [], $secure = null)
     {
         $domain = env('APP_URL');
-        if ($secure == true)
+        if (is_bool($secure) && $secure == true)
         {
             $domain = str_replace('http', 'https', $domain);
         }
