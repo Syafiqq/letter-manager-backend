@@ -11,10 +11,10 @@ class LoginTest extends ControllerTestCase
 {
     public function test_get_login_path()
     {
-        $this->assertTrue(true);
-        $domain = env('APP_URL');
-        $route  = route('student.auth.login.post', []);
-        echo str_replace($domain, '', $route);
+        $domain     = env('APP_URL');
+        $route      = route('student.auth.login.post', []);
+        $path_route = str_replace($domain, '', $route);
+        $this->assertEquals($path_route, path_route('student.auth.login.post'));
     }
 
     public function test_login_with_empty_data()
