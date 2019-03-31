@@ -91,7 +91,7 @@ abstract class RollbackAbleSeeder extends \Illuminate\Database\Seeder
         return $instance;
     }
 
-
+    abstract function roll();
 }
 
 ?>
