@@ -26,7 +26,10 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     /**
      * @var array
      */
-    protected $dates = [];
+    protected $dates = [
+        'created_at',
+        'updated_at'
+    ];
     /**
      * @var array
      */
@@ -64,7 +67,9 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      * @var string
      */
     protected $primaryKey = 'id';
-    protected $casts = ['id' => 'string'];
+    protected $casts = [
+        'id' => 'string'
+    ];
     public $incrementing = false;
 
     /**
