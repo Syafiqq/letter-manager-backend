@@ -31,7 +31,6 @@ class JwtTest extends TestCase
      */
     public function test_parse()
     {
-        $this->assertTrue(true);
         $user        = \App\Eloquents\User::take(1)->first();
         $stringToken = self::_generateToken($this, self::_dummyClaims($user->{'id'}));
         $request     = Helpers::createJsonRequest(
@@ -56,8 +55,9 @@ class JwtTest extends TestCase
         }
         else
         {
+            /** @var \Tymon\JWTAuth\Payload $payload */
             $payload = $auth->getPayload();
-            echo $payload;
+            $this->assertEquals($user->{'id'}, $payload->get(ClaimTable::SUBJECT));
         }
     }
 
