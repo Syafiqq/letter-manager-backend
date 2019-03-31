@@ -11,7 +11,7 @@ use App\Model\Util\HttpStatus;
  */
 class LoginTest extends ControllerTestCase
 {
-    private static $repos;
+    private static $users;
 
     /**
      * LoginTest constructor.
@@ -170,12 +170,12 @@ class LoginTest extends ControllerTestCase
 
     public static function _getUserRepository()
     {
-        if (self::$repos == null)
+        if (self::$users == null)
         {
-            self::$repos = \App\Eloquents\User::all();
+            self::$users = \App\Eloquents\User::all();
         }
 
-        return self::$repos;
+        return self::$users;
     }
 
     public static function _getRightPassword()
