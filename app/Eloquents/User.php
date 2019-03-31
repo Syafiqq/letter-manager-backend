@@ -41,7 +41,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'role',
         'stamp',
         'password',
-        'remember_token',
+        'lost_password',
         'created_at',
         'updated_at'
     ];
@@ -63,7 +63,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     protected $hidden = [
         'password',
-        'remember_token'
+        'lost_password'
     ];
     /**
      * @var string
@@ -110,16 +110,6 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public function getRememberToken()
     {
         return $this->{$this->getRememberTokenName()};
-    }
-
-    /**
-     * Get the column name for the "remember me" token.
-     *
-     * @return string
-     */
-    public function getRememberTokenName()
-    {
-        return 'remember_token';
     }
 
     /**

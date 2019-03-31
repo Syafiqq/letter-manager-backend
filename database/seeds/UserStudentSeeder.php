@@ -28,18 +28,18 @@ class UserStudentSeeder extends RollbackAbleSeeder
                 $val[] = $cell->getValue();
             }
             $model                     = new \App\Eloquents\User();
-            $model->{'id'}             = $val[0];
-            $model->{'credential'}     = $val[1];
-            $model->{'email'}          = $val[2];
-            $model->{'name'}           = $val[3];
-            $model->{'gender'}         = $val[4];
-            $model->{'role'}           = $val[5];
-            $model->{'stamp'}          = $val[6];
-            $model->{'avatar'}         = $val[7];
-            $model->{'password'}       = is_null($val[8]) ? null : app('hash')->make($val[8], []);
-            $model->{'remember_token'} = $val[9];
-            $model->{'created_at'}     = is_null($val[10]) ? null : Carbon::createFromFormat('Y-m-d H:i:s', $val[10]);
-            $model->{'updated_at'}     = is_null($val[11]) ? null : Carbon::createFromFormat('Y-m-d H:i:s', $val[11]);
+            $model->{'id'}            = $val[0];
+            $model->{'credential'}    = $val[1];
+            $model->{'email'}         = $val[2];
+            $model->{'name'}          = $val[3];
+            $model->{'gender'}        = $val[4];
+            $model->{'role'}          = $val[5];
+            $model->{'stamp'}         = $val[6];
+            $model->{'avatar'}        = $val[7];
+            $model->{'password'}      = is_null($val[8]) ? null : app('hash')->make($val[8], []);
+            $model->{'lost_password'} = $val[9];
+            $model->{'created_at'}    = is_null($val[10]) ? null : Carbon::createFromFormat('Y-m-d H:i:s', $val[10]);
+            $model->{'updated_at'}    = is_null($val[11]) ? null : Carbon::createFromFormat('Y-m-d H:i:s', $val[11]);
             $model->save();
         }
 
