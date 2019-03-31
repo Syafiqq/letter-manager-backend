@@ -144,6 +144,27 @@ abstract class BaseAuth extends Controller
     }
 
     /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function patchRecover(Request $request)
+    {
+        $credentials = $this->validate($request, [
+            'token' => 'bail|required',
+            'password' => 'bail|required|confirmed|min:8',
+        ]);
+
+        /** @var User $user */
+        $user                    = User::where('lost_password', '=', $credentials['token'])->first();
+        $user->{'password'}      = $this->hashManager->make($credentials['password'], []);
+        $user->{'lost_password'} = null;
+        $user->save();
+
+        return response()->json(PopoMapper::alertResponse(HttpStatus::OK, 'Password telah berhasil dirubah', ['credential' => $user['credential'], 'role' => $user['role']]), HttpStatus::OK);
+    }
+
+    /**
      * @param Token $token
      * @return \Illuminate\Http\JsonResponse
      */
