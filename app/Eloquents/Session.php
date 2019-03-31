@@ -19,7 +19,6 @@ class Session extends Model
      * @var bool
      */
     public $timestamps = false;
-    public $incrementing = false;
     /**
      * @var string
      */
@@ -37,10 +36,19 @@ class Session extends Model
         'issuer'
     ];
     /**
+     * The attributes that are mass assignable.
+     *
      * @var array
      */
     protected $fillable = [
         'session'
+    ];
+    /**
+     * The attributes excluded from the model's JSON form.
+     *
+     * @var array
+     */
+    protected $hidden = [
     ];
     /**
      * @var string
@@ -49,6 +57,7 @@ class Session extends Model
     protected $casts = [
         'id' => 'string'
     ];
+    public $incrementing = false;
 
     /**
      * @return mixed
