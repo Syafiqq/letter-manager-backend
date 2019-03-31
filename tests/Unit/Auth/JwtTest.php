@@ -34,6 +34,18 @@ class JwtTest extends TestCase
         $encode = $auth->manager()->encode($payload);
         echo $encode->get();
     }
+
+    public static function _generateToken(TestCase $case, array $claims): string
+    {
+        /** @var \Tymon\JWTAuth\Factory $factory */
+        $factory = $case->app->make('tymon.jwt.payload.factory');
+        /** @var \Tymon\JWTAuth\JWTAuth $auth */
+        $auth    = $case->app->make('tymon.jwt.auth');
+        $payload = $factory->customClaims($claims)->make();
+        $encode  = $auth->manager()->encode($payload);
+
+        return $encode->get();
+    }
 }
 
 ?>
