@@ -18,16 +18,7 @@ class JwtTest extends TestCase
         $factory = $this->app->make('tymon.jwt.payload.factory');
         /** @var \Tymon\JWTAuth\JWTAuth $auth */
         $auth   = $this->app->make('tymon.jwt.auth');
-        $claims = [
-            ClaimTable::AUDIENCE => 'audience', //Audience of the token
-            ClaimTable::ISSUER => 'issuer', // Issuer of the token
-            ClaimTable::SUBJECT => 'subject', // Subject of the token
-            ClaimTable::ISSUED_AT => time(), // Time when JWT was issued.
-            ClaimTable::EXPIRATION => time() + 60 * 60, // Expiration time
-            ClaimTable::AUTH_STAMP => 'stamp',
-            ClaimTable::SESSION => 'session',
-            ClaimTable::ROLE => 'role',
-        ];
+        $claims = self::_dummyClaims();
 
         $payload = $factory->customClaims($claims)->make();
 
