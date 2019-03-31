@@ -41,7 +41,7 @@ class CreateUsersTable extends Migration
                 $table->uuid('stamp');
                 $table->string('avatar', 100)->nullable();
                 $table->string('password', 60);
-                $table->rememberToken();
+                $table->uuid('lost_password')->nullable();
                 $table->timestamp('created_at');
                 $table->timestamp('updated_at');
                 $table->primary('id');
