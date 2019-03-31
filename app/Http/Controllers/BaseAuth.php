@@ -10,12 +10,14 @@
 namespace App\Http\Controllers;
 
 
+use App\Eloquents\Coupon;
 use App\Eloquents\Session;
 use App\Eloquents\User;
 use App\Model\Popo\PopoMapper;
 use App\Model\Util\ClaimTable;
 use App\Model\Util\HttpStatus;
 use Illuminate\Contracts\Hashing\Hasher;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Ramsey\Uuid\Uuid;
 use Tymon\JWTAuth\Factory;
@@ -74,6 +76,43 @@ abstract class BaseAuth extends Controller
         $user->session()->save($session);
 
         return $this->respondWithToken($this->jwt($user, $session));
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
+     */
+    public function postRegister(Request $request)
+    {
+        $credentials = $this->validate($request, [
+            'credential' => 'bail|required|max:100|unique:users',
+            'email' => 'bail|required|max:100|email',
+            'name' => 'bail|required|max:100',
+            'gender' => 'bail|required|in:male,female',
+            'role' => 'bail|required|in:student',
+            'password' => 'bail|required|confirmed|min:8',
+            'password_confirmation' => 'bail|required|min:8',
+            'token' => "bail|required|exists:coupons,coupon,usage,{$this->role}",
+        ]);
+
+        /** @var Builder $coupon */
+        $coupon = new Coupon();
+        $coupon->where('coupon', $credentials['token'])->delete();
+
+        $user                 = new User();
+        $user->{'id'}         = Uuid::uuid1()->toString();
+        $user->{'stamp'}      = Uuid::uuid4()->toString();
+        $user->{'credential'} = $credentials['credential'];
+        $user->{'email'}      = $credentials['email'];
+        $user->{'name'}       = $credentials['name'];
+        $user->{'gender'}     = $credentials['gender'];
+        $user->{'role'}       = $credentials['role'];
+        $user->{'avatar'}     = null;
+        $user->{'password'}   = $this->hashManager->make($credentials['password'], []);
+        $user->save();
+
+        return response()->json(PopoMapper::alertResponse(HttpStatus::OK, 'User register successfully'), HttpStatus::OK);
     }
 
     /**
