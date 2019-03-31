@@ -48,7 +48,8 @@ class JWTAuthenticateMiddleware extends \Tymon\JWTAuth\Http\Middleware\Authentic
         }
         try
         {
-            Session::$session = json_decode(\App\Eloquents\Session::where('id', $payload->get(ClaimTable::SESSION))->first()->get()->pluck('storage')[0] ?? '{}', true) ?? [];
+            $sess             = \App\Eloquents\Session::where('id', $payload->get(ClaimTable::SESSION))->first();
+            Session::$session = json_decode($sess == null ? '{}' : $sess->{'storage'} ?? '{}', true) ?? [];
         }
         catch (\Exception $_)
         {
