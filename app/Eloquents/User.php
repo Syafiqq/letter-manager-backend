@@ -171,6 +171,6 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
     public function session()
     {
-        return $this->hasMany('App\Eloquents\Session', 'issuer', 'id');
+        return $this->hasMany('\App\Eloquents\Session', 'issuer', 'id');
     }
 }
