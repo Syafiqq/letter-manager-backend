@@ -152,7 +152,7 @@ class LoginTest extends ControllerTestCase
     }
 
     /**
-     * @param null $creds
+     * @param array $creds
      * @return array
      */
     private function _doAuth(array $creds)
