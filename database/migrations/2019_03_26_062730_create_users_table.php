@@ -38,8 +38,8 @@ class CreateUsersTable extends Migration
                 $table->string('credential', 100)->unique();
                 $table->string('email', 100)->nullable();
                 $table->string('name', 100);
-                $table->enum('gender', ['male', 'female']);
-                $table->enum('role', ['student']);
+                $table->enum('gender', \App\Eloquents\User::genders);
+                $table->enum('role', \App\Eloquents\User::roles);
                 $table->uuid('stamp');
                 $table->string('avatar', 100)->nullable();
                 $table->string('password', 60);

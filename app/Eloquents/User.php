@@ -15,6 +15,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
     const table = 'users';
     const roles = ['student'];
+    const genders = ['male', 'female'];
     /**
      * @var bool
      */
