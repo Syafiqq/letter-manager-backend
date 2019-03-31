@@ -58,6 +58,28 @@ class RefreshTest extends TestCase
         $this->assertTrue(strlen($this->response->headers->get('authorization')) != 0);
     }
 
+    public function test_it_should_successfully_refresh_expired_token()
+    {
+        $actual = self::_getUserRepository()->take(1)->first();
+        /** @var array $token */
+        $tokenString = JwtTest::_generateToken($this, JwtTest::_dummyClaims($actual->{'id'}, 1));
+        sleep(2);
+        self::_accessAuthorizedArea($this, $tokenString, HttpStatus::UNAUTHORIZED);
+        $this->json('POST', self::_getRoute(),
+            [],
+            array_merge(self::_getHeaders(), [
+                'Authorization' => "Bearer {$tokenString}"
+            ]))
+            ->seeJson([
+                'code' => HttpStatus::OK,
+            ]);
+        $tokenString = $this->response->headers->get('authorization');
+        $this->assertTrue(!is_null($tokenString));
+        $this->assertTrue(strlen($tokenString) != 0);
+        $tokenString = substr($tokenString, 7);
+        self::_accessAuthorizedArea($this, $tokenString, HttpStatus::OK);
+    }
+
     public static function _getUserRepository()
     {
         if (self::$users == null)
@@ -86,6 +108,18 @@ class RefreshTest extends TestCase
     public static function _getRoute()
     {
         return path_route('student.auth.refresh.post');
+    }
+
+    public static function _accessAuthorizedArea(TestCase $case, string $token, int $expectedStatue)
+    {
+        $case->json('POST', '/',
+            [],
+            array_merge(self::_getHeaders(), [
+                'Authorization' => "Bearer {$token}"
+            ]))
+            ->seeJson([
+                'code' => $expectedStatue,
+            ]);
     }
 }
 
