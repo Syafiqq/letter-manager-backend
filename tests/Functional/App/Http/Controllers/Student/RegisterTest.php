@@ -10,6 +10,7 @@
 class RegisterTest extends ControllerTestCase
 {
     private static $users;
+    private static $coupons;
 
     public static function _getRoute()
     {
@@ -39,6 +40,16 @@ class RegisterTest extends ControllerTestCase
         }
 
         return self::$users;
+    }
+
+    public static function _getCouponRepository()
+    {
+        if (self::$coupons == null)
+        {
+            self::$coupons = \App\Eloquents\Coupon::all();
+        }
+
+        return self::$coupons;
     }
 
     public static function _getRightPassword()
