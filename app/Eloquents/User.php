@@ -7,6 +7,7 @@ use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Lumen\Auth\Authorizable;
+use Ramsey\Uuid\Uuid;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Model implements AuthenticatableContract, AuthorizableContract, JWTSubject
@@ -173,5 +174,17 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public function session()
     {
         return $this->hasMany('\App\Eloquents\Session', 'issuer', 'id');
+    }
+
+    /**
+     * @return User
+     * @throws \Exception
+     */
+    public function generateRecoveryCode()
+    {
+
+        $this->{'lost_password'} = Uuid::uuid4()->toString();
+
+        return $this;
     }
 }
