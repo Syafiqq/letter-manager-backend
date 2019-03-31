@@ -38,12 +38,12 @@ class JwtTest extends TestCase
         return $encode->get();
     }
 
-    public static function _dummyClaims(int $expiration = 60 * 60): array
+    public static function _dummyClaims(string $subject = 'subject', int $expiration = 60 * 60): array
     {
         return [
             ClaimTable::AUDIENCE => 'audience', //Audience of the token
             ClaimTable::ISSUER => 'issuer', // Issuer of the token
-            ClaimTable::SUBJECT => 'subject', // Subject of the token
+            ClaimTable::SUBJECT => $subject, // Subject of the token
             ClaimTable::ISSUED_AT => time(), // Time when JWT was issued.
             ClaimTable::EXPIRATION => time() + $expiration, // Expiration time
             ClaimTable::AUTH_STAMP => 'stamp',
