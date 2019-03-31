@@ -116,6 +116,14 @@ abstract class BaseAuth extends Controller
     }
 
     /**
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function postRefresh()
+    {
+        return response()->json(PopoMapper::jsonResponse(HttpStatus::OK, ''), HttpStatus::OK);
+    }
+
+    /**
      * @param Token $token
      * @return \Illuminate\Http\JsonResponse
      */
