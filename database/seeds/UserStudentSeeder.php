@@ -1,9 +1,8 @@
 <?php
 
 use Carbon\Carbon;
-use Illuminate\Database\Seeder;
 
-class UserStudentSeeder extends Seeder
+class UserStudentSeeder extends RollbackAbleSeeder
 {
     /**
      * Run the database seeds.
@@ -44,5 +43,11 @@ class UserStudentSeeder extends Seeder
             $user->save();
         }
 
+    }
+
+
+    function roll()
+    {
+        \App\Eloquents\User::query()->delete();
     }
 }
