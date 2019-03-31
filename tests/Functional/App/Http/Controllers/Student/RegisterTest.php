@@ -14,6 +14,27 @@ class RegisterTest extends TestCase
     private static $users;
     private static $coupons;
 
+    public function test_it_should_not_access_after_authenticated()
+    {
+        $actual = self::_getUserRepository()->take(1)->first();
+        /** @var array $token */
+        $token = self::_doAuth($this, [
+            'credential' => $actual->{'credential'},
+            'password' => self::_getRightPassword(),
+        ]);
+        $this->json('POST', self::_getRoute(),
+            [
+                'credential' => $actual->{'credential'},
+                'password' => self::_getRightPassword(),
+            ],
+            array_merge(self::_getHeaders(), [
+                'Authorization' => "Bearer {$token['data']['token']}"
+            ]))
+            ->seeJson([
+                'code' => HttpStatus::FORBIDDEN,
+            ]);
+    }
+
     public function test_it_should_fail_register_missing_required_data()
     {
         /** @var \App\Eloquents\User $user */
