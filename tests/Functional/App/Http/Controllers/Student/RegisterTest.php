@@ -9,7 +9,7 @@ use App\Model\Util\HttpStatus;
  * Email        : syafiq.rezpector@gmail.com
  * Github       : syafiqq
  */
-class RegisterTest extends ControllerTestCase
+class RegisterTest extends TestCase
 {
     private static $users;
     private static $coupons;

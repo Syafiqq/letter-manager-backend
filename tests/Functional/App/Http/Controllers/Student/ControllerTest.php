@@ -7,7 +7,7 @@
  * Github       : syafiqq
  */
 
-class ControllerTest extends ControllerTestCase
+class ControllerTest extends TestCase
 {
     public function testConstructor()
     {
