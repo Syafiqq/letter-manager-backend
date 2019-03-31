@@ -92,6 +92,8 @@ abstract class RollbackAbleSeeder extends \Illuminate\Database\Seeder
     }
 
     abstract function roll();
+
+    abstract function run();
 }
 
 ?>
