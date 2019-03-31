@@ -26,6 +26,50 @@ class JwtTest extends TestCase
         echo $encode->get();
     }
 
+    public function test_parse()
+    {
+        $this->assertTrue(true);
+        $user        = \App\Eloquents\User::take(1)->first();
+        $stringToken = self::_generateToken($this, self::_dummyClaims($user->{'id'}));
+        $request     = Helpers::createJsonRequest(
+            'POST',
+            [],
+            path_route('student.auth.login.post'),
+            [
+                'CONTENT_TYPE' => 'application/json',
+                'HTTP_ACCEPT' => 'application/json',
+                'HTTP_AUTHORIZATION' => "Bearer $stringToken",
+            ]
+        );
+
+        /** @var \Tymon\JWTAuth\JWTAuth $auth */
+        $auth = $this->app->make('tymon.jwt.auth');
+        $auth->setRequest($request);
+
+        try
+        {
+            if (!$user = $auth->parseToken()->authenticate())
+            {
+                echo 'Not Found';
+            }
+        }
+        catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e)
+        {
+            echo $e->getMessage();
+        }
+        catch (Tymon\JWTAuth\Exceptions\TokenInvalidException $e)
+        {
+            echo $e->getMessage();
+        }
+        catch (Tymon\JWTAuth\Exceptions\JWTException $e)
+        {
+            echo $e->getMessage();
+        }
+
+        $payload = $auth->getPayload();
+        echo $payload;
+    }
+
     public static function _generateToken(TestCase $case, array $claims): string
     {
         /** @var \Tymon\JWTAuth\Factory $factory */
