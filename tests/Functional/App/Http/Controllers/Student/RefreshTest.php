@@ -41,6 +41,23 @@ class RefreshTest extends TestCase
             ]);
     }
 
+    public function test_it_should_successfully_refresh_token()
+    {
+        $actual = self::_getUserRepository()->take(1)->first();
+        /** @var array $token */
+        $tokenString = JwtTest::_generateToken($this, JwtTest::_dummyClaims($actual->{'id'}));
+        $this->json('POST', self::_getRoute(),
+            [],
+            array_merge(self::_getHeaders(), [
+                'Authorization' => "Bearer {$tokenString}"
+            ]))
+            ->seeJson([
+                'code' => HttpStatus::OK,
+            ]);
+        $this->assertTrue(!is_null($this->response->headers->get('authorization')));
+        $this->assertTrue(strlen($this->response->headers->get('authorization')) != 0);
+    }
+
     public static function _getUserRepository()
     {
         if (self::$users == null)
@@ -64,23 +81,6 @@ class RefreshTest extends TestCase
     public static function _getHeaders()
     {
         return LoginTest::_getHeaders();
-    }
-
-    public function test_it_should_successfully_refresh_token()
-    {
-        $actual = self::_getUserRepository()->take(1)->first();
-        /** @var array $token */
-        $tokenString = JwtTest::_generateToken($this, JwtTest::_dummyClaims($actual->{'id'}));
-        $this->json('POST', self::_getRoute(),
-            [],
-            array_merge(self::_getHeaders(), [
-                'Authorization' => "Bearer {$tokenString}"
-            ]))
-            ->seeJson([
-                'code' => HttpStatus::OK,
-            ]);
-        $this->assertTrue(!is_null($this->response->headers->get('authorization')));
-        $this->assertTrue(strlen($this->response->headers->get('authorization')) != 0);
     }
 
     public static function _getRoute()
