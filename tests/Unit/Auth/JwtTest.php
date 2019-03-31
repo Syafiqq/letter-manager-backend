@@ -26,6 +26,9 @@ class JwtTest extends TestCase
         echo $encode->get();
     }
 
+    /**
+     * @throws \Tymon\JWTAuth\Exceptions\JWTException
+     */
     public function test_parse()
     {
         $this->assertTrue(true);
@@ -46,28 +49,16 @@ class JwtTest extends TestCase
         $auth = $this->app->make('tymon.jwt.auth');
         $auth->setRequest($request);
 
-        try
+        $auth->parseToken();
+        if (!$user = $auth->authenticate())
         {
-            if (!$user = $auth->parseToken()->authenticate())
-            {
-                echo 'Not Found';
-            }
+            echo 'Not Found';
         }
-        catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e)
+        else
         {
-            echo $e->getMessage();
+            $payload = $auth->getPayload();
+            echo $payload;
         }
-        catch (Tymon\JWTAuth\Exceptions\TokenInvalidException $e)
-        {
-            echo $e->getMessage();
-        }
-        catch (Tymon\JWTAuth\Exceptions\JWTException $e)
-        {
-            echo $e->getMessage();
-        }
-
-        $payload = $auth->getPayload();
-        echo $payload;
     }
 
     public static function _generateToken(TestCase $case, array $claims): string
