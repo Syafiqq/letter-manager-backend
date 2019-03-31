@@ -31,9 +31,7 @@ class CreateUsersTable extends Migration
     {
         if (!$this->schema->hasTable(self::$tableName))
         {
-            /** @var Illuminate\Database\Connection $db */
-            $db = \Illuminate\Support\Facades\DB::getFacadeRoot();
-            $this->schema->create(self::$tableName, function (Blueprint $table) use ($db) {
+            $this->schema->create(self::$tableName, function (Blueprint $table) {
                 $table->uuid('id');
                 $table->string('credential', 100)->unique();
                 $table->string('email', 100)->nullable();

@@ -31,9 +31,7 @@ class CreateSessionTable extends Migration
     {
         if (!$this->schema->hasTable(self::$tableName))
         {
-            /** @var Illuminate\Database\Connection $db */
-            $db = \Illuminate\Support\Facades\DB::getFacadeRoot();
-            $this->schema->create(self::$tableName, function (Blueprint $table) use ($db) {
+            $this->schema->create(self::$tableName, function (Blueprint $table) {
                 $table->uuid('id');
                 $table->uuid('issuer');
                 $table->longText('session')->nullable();
