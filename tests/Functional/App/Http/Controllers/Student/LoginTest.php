@@ -38,7 +38,7 @@ class LoginTest extends TestCase
     {
         $this->expectException(\Illuminate\Validation\ValidationException::class);
 
-        $request = $this->createJsonRequest(
+        $request = Helpers::createJsonRequest(
             'POST',
             null,
             self::_getRoute()
@@ -57,7 +57,7 @@ class LoginTest extends TestCase
     public function test_login_with_right_data()
     {
         $actual     = self::_getUserRepository()->take(1)->first();
-        $request    = $this->createJsonRequest(
+        $request    = Helpers::createJsonRequest(
             'POST',
             [
                 'credential' => $actual->{'credential'},
