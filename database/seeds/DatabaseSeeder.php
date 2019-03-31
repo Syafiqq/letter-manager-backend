@@ -1,8 +1,6 @@
 <?php
 
-use Illuminate\Database\Seeder;
-
-class DatabaseSeeder extends Seeder
+class DatabaseSeeder extends RollbackAbleSeeder
 {
     /**
      * Run the database seeds.
@@ -12,6 +10,14 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // $this->call('UsersTableSeeder');
-        $this->call('UserStudentSeeder');
+
+        $this->withRollback(true)->call('UserStudentSeeder');
+
+        $this->withRollback(false)->call('UserStudentSeeder');
+    }
+
+    function roll()
+    {
+        echo 'Do Nothing';
     }
 }
