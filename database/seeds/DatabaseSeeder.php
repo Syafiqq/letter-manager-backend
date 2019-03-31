@@ -11,9 +11,11 @@ class DatabaseSeeder extends RollbackAbleSeeder
     {
         // $this->call('UsersTableSeeder');
 
+        $this->withRollback(true)->call('CouponSeeder');
         $this->withRollback(true)->call('UserStudentSeeder');
 
         $this->withRollback(false)->call('UserStudentSeeder');
+        $this->withRollback(false)->call('CouponSeeder');
     }
 
     function roll()
