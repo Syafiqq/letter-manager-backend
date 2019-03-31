@@ -69,6 +69,7 @@ $app->routeMiddleware([
     'registered.role' => App\Http\Middleware\RegisteredRoleMiddleware::class,
     'c.jwt.auth' => App\Http\Middleware\JWTAuthenticateMiddleware::class,
     'c.jwt.refresh' => \App\Http\Middleware\JWTRefreshTokenMiddleware::class,
+    'valid.auth.recovery' => \App\Http\Middleware\ValidAuthRecoveryMiddleware::class,
 ]);
 
 /*
