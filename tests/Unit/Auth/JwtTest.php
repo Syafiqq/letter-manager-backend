@@ -13,7 +13,6 @@ class JwtTest extends TestCase
 {
     public function test_encode()
     {
-        $this->assertTrue(true);
         /** @var \Tymon\JWTAuth\Factory $factory */
         $factory = $this->app->make('tymon.jwt.payload.factory');
         /** @var \Tymon\JWTAuth\JWTAuth $auth */
@@ -23,7 +22,8 @@ class JwtTest extends TestCase
         $payload = $factory->customClaims($claims)->make();
 
         $encode = $auth->manager()->encode($payload);
-        echo $encode->get();
+        $this->assertTrue(!is_null($encode->get()));
+        $this->assertTrue(strlen($encode->get()) != 0);
     }
 
     /**
