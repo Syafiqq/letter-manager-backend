@@ -124,6 +124,26 @@ abstract class BaseAuth extends Controller
     }
 
     /**
+     * @param Request $request
+     * @return $this|\Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Validation\ValidationException
+     * @throws \Exception
+     */
+    public function postLost(Request $request)
+    {
+        $credentials = $this->validate($request, [
+            'credential' => 'required|exists:users,credential|max:100',
+            'role' => 'bail|required|in:student,counselor',
+        ]);
+
+        /** @var User $user */
+        $user = User::where('credential', $credentials['credential'])->first();
+        $user->generateRecoveryCode()->save();
+
+        return response()->json(PopoMapper::alertResponse(HttpStatus::OK, 'User will be processed', ['recovery_token' => $user['lost_password']]), HttpStatus::OK);
+    }
+
+    /**
      * @param Token $token
      * @return \Illuminate\Http\JsonResponse
      */
