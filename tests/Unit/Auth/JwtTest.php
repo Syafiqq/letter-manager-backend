@@ -61,6 +61,62 @@ class JwtTest extends TestCase
         }
     }
 
+    /**
+     * @throws \Tymon\JWTAuth\Exceptions\JWTException
+     */
+    public function test_parse_expired()
+    {
+        $this->expectException(\Tymon\JWTAuth\Exceptions\TokenExpiredException::class);
+
+        $user        = \App\Eloquents\User::take(1)->first();
+        $stringToken = self::_generateToken($this, self::_dummyClaims($user->{'id'}, 1));
+        $request     = Helpers::createJsonRequest(
+            'POST',
+            [],
+            path_route('student.auth.login.post'),
+            [
+                'CONTENT_TYPE' => 'application/json',
+                'HTTP_ACCEPT' => 'application/json',
+                'HTTP_AUTHORIZATION' => "Bearer $stringToken",
+            ]
+        );
+
+        sleep(2);
+        /** @var \Tymon\JWTAuth\JWTAuth $auth */
+        $auth = $this->app->make('tymon.jwt.auth');
+        $auth->setRequest($request);
+        $auth->parseToken();
+        $auth->getPayload();
+    }
+
+    /**
+     * @throws \Tymon\JWTAuth\Exceptions\JWTException
+     */
+    public function test_parse_invalidate()
+    {
+        $this->expectException(\Tymon\JWTAuth\Exceptions\TokenInvalidException::class);
+
+        $user        = \App\Eloquents\User::take(1)->first();
+        $stringToken = self::_generateToken($this, self::_dummyClaims($user->{'id'}));
+        $request     = Helpers::createJsonRequest(
+            'POST',
+            [],
+            path_route('student.auth.login.post'),
+            [
+                'CONTENT_TYPE' => 'application/json',
+                'HTTP_ACCEPT' => 'application/json',
+                'HTTP_AUTHORIZATION' => "Bearer $stringToken",
+            ]
+        );
+
+        /** @var \Tymon\JWTAuth\JWTAuth $auth */
+        $auth = $this->app->make('tymon.jwt.auth');
+        $auth->setRequest($request);
+        $auth->parseToken();
+        $auth->invalidate(true);
+        $auth->getPayload();
+    }
+
     public static function _generateToken(TestCase $case, array $claims): string
     {
         /** @var \Tymon\JWTAuth\Factory $factory */
