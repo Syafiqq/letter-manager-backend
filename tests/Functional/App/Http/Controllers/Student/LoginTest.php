@@ -28,7 +28,7 @@ class LoginTest extends ControllerTestCase
         $route      = route('student.auth.login.post', []);
         $path_route = str_replace($domain, '', $route);
         $this->assertEquals($path_route, path_route('student.auth.login.post'));
-        $this->assertEquals($path_route, $this->_getRoute());
+        $this->assertEquals($path_route, self::_getRoute());
     }
 
     /**
@@ -41,7 +41,7 @@ class LoginTest extends ControllerTestCase
         $request = $this->createJsonRequest(
             'POST',
             null,
-            $this->_getRoute()
+            self::_getRoute()
         );
         /** @var \App\Http\Controllers\Student\Auth $controller */
         $controller = $this->app->make(\App\Http\Controllers\Student\Auth::class);
@@ -56,15 +56,15 @@ class LoginTest extends ControllerTestCase
      */
     public function test_login_with_right_data()
     {
-        $actual     = $this->_getUserRepository()->take(1)->first();
+        $actual     = self::_getUserRepository()->take(1)->first();
         $request    = $this->createJsonRequest(
             'POST',
             [
                 'credential' => $actual->{'credential'},
-                'password' => $this->_getARightPassword(),
+                'password' => self::_getRightPassword(),
                 'role' => 'student'
             ],
-            $this->_getRoute()
+            self::_getRoute()
         );
         $controller = $this->app->make(\App\Http\Controllers\Student\Auth::class);
 
@@ -80,7 +80,7 @@ class LoginTest extends ControllerTestCase
     public function test_it_should_respond_unprocessable_entity_given_no_data()
     {
         /** @var $response */
-        $this->json('POST', $this->_getRoute(), [], $this->_getHeaders())
+        $this->json('POST', self::_getRoute(), [], self::_getHeaders())
             ->seeJson([
                 'code' => HttpStatus::UNPROCESSABLE_ENTITY,
             ]);
@@ -88,14 +88,14 @@ class LoginTest extends ControllerTestCase
 
     public function test_it_should_respond_ok_given_valid_data()
     {
-        $actual = $this->_getUserRepository()->take(1)->first();
+        $actual = self::_getUserRepository()->take(1)->first();
         /** @var $response */
-        $this->json('POST', $this->_getRoute(),
+        $this->json('POST', self::_getRoute(),
             [
                 'credential' => $actual->{'credential'},
-                'password' => $this->_getARightPassword(),
+                'password' => self::_getRightPassword(),
             ],
-            $this->_getHeaders())
+            self::_getHeaders())
             ->seeJson([
                 'code' => HttpStatus::OK,
             ]);
@@ -103,14 +103,14 @@ class LoginTest extends ControllerTestCase
 
     public function test_it_should_respond_not_found_given_invalid_data()
     {
-        $actual = $this->_getUserRepository()->take(1)->first();
+        $actual = self::_getUserRepository()->take(1)->first();
         /** @var $response */
-        $this->json('POST', $this->_getRoute(),
+        $this->json('POST', self::_getRoute(),
             [
                 'credential' => $actual->{'credential'},
-                'password' => $this->_getAWrongPassword(),
+                'password' => self::_getWrongPassword(),
             ],
-            $this->_getHeaders())
+            self::_getHeaders())
             ->seeJson([
                 'code' => HttpStatus::NOT_FOUND,
             ]);
@@ -118,18 +118,18 @@ class LoginTest extends ControllerTestCase
 
     public function test_it_should_not_access_login_page_again()
     {
-        $actual = $this->_getUserRepository()->take(1)->first();
+        $actual = self::_getUserRepository()->take(1)->first();
         /** @var array $token */
-        $token = $this->_doAuth([
+        $token = self::_doAuth($this, [
             'credential' => $actual->{'credential'},
-            'password' => $this->_getARightPassword(),
+            'password' => self::_getRightPassword(),
         ]);
-        $this->json('POST', $this->_getRoute(),
+        $this->json('POST', self::_getRoute(),
             [
                 'credential' => $actual->{'credential'},
-                'password' => $this->_getARightPassword(),
+                'password' => self::_getRightPassword(),
             ],
-            array_merge($this->_getHeaders(), [
+            array_merge(self::_getHeaders(), [
                 'Authorization' => "Bearer {$token['data']['token']}"
             ]))
             ->seeJson([
@@ -137,13 +137,12 @@ class LoginTest extends ControllerTestCase
             ]);
     }
 
-
-    private function _getRoute()
+    public static function _getRoute()
     {
         return path_route('student.auth.login.post');
     }
 
-    private function _getHeaders()
+    public static function _getHeaders()
     {
         return [
             'Content-Type' => 'application/json',
@@ -152,23 +151,24 @@ class LoginTest extends ControllerTestCase
     }
 
     /**
+     * @param TestCase $case
      * @param array $creds
      * @return array
      */
-    private function _doAuth(array $creds)
+    public static function _doAuth(TestCase $case, array $creds)
     {
         /** @var $response */
-        $this->json('POST', $this->_getRoute(),
+        $case->json('POST', self::_getRoute(),
             $creds,
-            $this->_getHeaders())
+            self::_getHeaders())
             ->seeJson([
                 'code' => HttpStatus::OK,
             ]);
 
-        return json_decode($this->response->content(), true);
+        return json_decode($case->response->content(), true);
     }
 
-    private function _getUserRepository()
+    public static function _getUserRepository()
     {
         if (self::$repos == null)
         {
@@ -178,12 +178,12 @@ class LoginTest extends ControllerTestCase
         return self::$repos;
     }
 
-    private function _getARightPassword()
+    public static function _getRightPassword()
     {
         return '12345678';
     }
 
-    private function _getAWrongPassword()
+    public static function _getWrongPassword()
     {
         return '123456789';
     }
