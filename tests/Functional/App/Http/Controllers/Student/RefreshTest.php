@@ -80,6 +80,37 @@ class RefreshTest extends TestCase
         self::_accessAuthorizedArea($this, $tokenString, HttpStatus::OK);
     }
 
+    public function test_it_should_not_refresh_invalidate_token()
+    {
+        $actual = self::_getUserRepository()->take(1)->first();
+        /** @var array $token */
+        $tokenString = JwtTest::_generateToken($this, JwtTest::_dummyClaims($actual->{'id'}));
+        $request     = Helpers::createJsonRequest(
+            'POST',
+            [],
+            '/',
+            [
+                'CONTENT_TYPE' => 'application/json',
+                'HTTP_ACCEPT' => 'application/json',
+                'HTTP_AUTHORIZATION' => "Bearer $tokenString",
+            ]
+        );
+        $auth        = $this->app->make('tymon.jwt.auth');
+        $auth->setRequest($request);
+        $auth->parseToken();
+        $auth->invalidate(true);
+
+        self::_accessAuthorizedArea($this, $tokenString, HttpStatus::UNAUTHORIZED);
+        $this->json('POST', self::_getRoute(),
+            [],
+            array_merge(self::_getHeaders(), [
+                'Authorization' => "Bearer {$tokenString}"
+            ]))
+            ->seeJson([
+                'code' => HttpStatus::UNAUTHORIZED,
+            ]);
+    }
+
     public static function _getUserRepository()
     {
         if (self::$users == null)
