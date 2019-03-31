@@ -16,6 +16,7 @@ use App\Eloquents\User;
 use App\Model\Popo\PopoMapper;
 use App\Model\Util\ClaimTable;
 use App\Model\Util\HttpStatus;
+use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -162,6 +163,19 @@ abstract class BaseAuth extends Controller
         $user->save();
 
         return response()->json(PopoMapper::alertResponse(HttpStatus::OK, 'Password telah berhasil dirubah', ['credential' => $user['credential'], 'role' => $user['role']]), HttpStatus::OK);
+    }
+
+    /**
+     * @param Guard $auth
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function postLogout(Guard $auth)
+    {
+        /** @var User $user */
+        /** @noinspection PhpUndefinedMethodInspection */
+        $auth->logout(true);
+
+        return response()->json(PopoMapper::alertResponse(HttpStatus::OK, 'Logout Successful'), HttpStatus::OK);
     }
 
     /**
