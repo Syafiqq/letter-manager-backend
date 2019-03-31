@@ -8,7 +8,7 @@ class CreateSessionTable extends Migration
     /**
      * @var string
      */
-    static $tableName = 'sessions';
+    static $tableName = \App\Eloquents\Session::table;
     /**
      * @var Illuminate\Database\Schema\Builder
      */
