@@ -59,7 +59,7 @@ class LostTest extends TestCase
             ]);
         $data = json_decode($this->response->content(), true)['data'];
         $this->assertArrayHasKey('recovery_token', $data);
-        User::where('credential', $actual->{'credential'})->update(['lost_password' => null]);
+        User::where('credential', $actual->{'credential'})->update(['lost_password' => $actual->{'lost_password'}]);
     }
 
     public static function _getRoute()
