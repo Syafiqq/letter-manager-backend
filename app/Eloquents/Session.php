@@ -68,19 +68,19 @@ class Session extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function users()
-    {
-        return $this->belongsTo('\App\Eloquents\User', 'issuer', 'id');
-    }
-
-    /**
      * @return string
      */
     public function getDateFormat()
     {
         return 'Y-m-d H:i:s';
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function users()
+    {
+        return $this->belongsTo('\App\Eloquents\User', 'issuer', 'id');
     }
 }
 
