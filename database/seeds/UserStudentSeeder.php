@@ -27,20 +27,20 @@ class UserStudentSeeder extends RollbackAbleSeeder
             {
                 $val[] = $cell->getValue();
             }
-            $user                     = new \App\Eloquents\User();
-            $user->{'id'}             = $val[0];
-            $user->{'credential'}     = $val[1];
-            $user->{'email'}          = $val[2];
-            $user->{'name'}           = $val[3];
-            $user->{'gender'}         = $val[4];
-            $user->{'role'}           = $val[5];
-            $user->{'stamp'}          = $val[6];
-            $user->{'avatar'}         = $val[7];
-            $user->{'password'}       = is_null($val[8]) ? null : app('hash')->make($val[8], []);
-            $user->{'remember_token'} = $val[9];
-            $user->{'created_at'}     = is_null($val[10]) ? null : Carbon::createFromFormat('Y-m-d H:i:s', $val[10]);
-            $user->{'updated_at'}     = is_null($val[11]) ? null : Carbon::createFromFormat('Y-m-d H:i:s', $val[11]);
-            $user->save();
+            $model                     = new \App\Eloquents\User();
+            $model->{'id'}             = $val[0];
+            $model->{'credential'}     = $val[1];
+            $model->{'email'}          = $val[2];
+            $model->{'name'}           = $val[3];
+            $model->{'gender'}         = $val[4];
+            $model->{'role'}           = $val[5];
+            $model->{'stamp'}          = $val[6];
+            $model->{'avatar'}         = $val[7];
+            $model->{'password'}       = is_null($val[8]) ? null : app('hash')->make($val[8], []);
+            $model->{'remember_token'} = $val[9];
+            $model->{'created_at'}     = is_null($val[10]) ? null : Carbon::createFromFormat('Y-m-d H:i:s', $val[10]);
+            $model->{'updated_at'}     = is_null($val[11]) ? null : Carbon::createFromFormat('Y-m-d H:i:s', $val[11]);
+            $model->save();
         }
 
     }
