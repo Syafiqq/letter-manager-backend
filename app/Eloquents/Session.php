@@ -55,7 +55,8 @@ class Session extends Model
      */
     protected $primaryKey = 'id';
     protected $casts = [
-        'id' => 'string'
+        'id' => 'string',
+        'issuer' => 'string'
     ];
     public $incrementing = false;
 
