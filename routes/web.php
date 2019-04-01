@@ -39,5 +39,8 @@ $router->group(['namespace' => 'Student', 'prefix' => '/student', 'middleware' =
     });
     $router->group(['middleware' => ['c.jwt.auth:student']], function () use ($router) {
         $router->post('/auth/logout', ['uses' => 'Auth@postLogout', 'as' => 'student.auth.logout.post']);
+        $router->group(['prefix' => '/letter'], function () use ($router) {
+            $router->post('/store', ['uses' => 'LetterController@postStore', 'as' => 'student.letter.store.post']);
+        });
     });
 });
