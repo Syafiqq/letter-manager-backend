@@ -1,4 +1,8 @@
 <?php
+
+use App\Model\Util\HttpStatus;
+use Illuminate\Http\UploadedFile;
+
 /**
  * This <letter-manager-backend> project created by :
  * Name         : syafiq
@@ -6,10 +10,25 @@
  * Email        : syafiq.rezpector@gmail.com
  * Github       : syafiqq
  */
-
 class StoreTest extends TestCase
 {
     private static $users;
+
+    public function test_it_should_failed_store_due_to_empty_data()
+    {
+        $user = self::_getUserRepository()->take(1)->first();
+        /** @var array $response */
+        $response = self::_doAuth($this, [
+            'credential' => $user->{'credential'},
+            'password' => self::_getRightPassword(),
+        ]);
+        $this->json('POST', self::_getRoute(),
+            [],
+            self::_getHeaders($response['data']['token']))
+            ->seeJson([
+                'code' => HttpStatus::UNPROCESSABLE_ENTITY,
+            ]);
+    }
 
     public static function _getRoute()
     {
@@ -18,14 +37,9 @@ class StoreTest extends TestCase
 
     public static function _getHeaders($authorization = 'empty')
     {
-        return array_merge(self::_getAuthHeaders(), [
+        return array_merge(LoginTest::_getHeaders(), [
             'Authorization' => "Bearer $authorization"
         ]);
-    }
-
-    public static function _getAuthHeaders()
-    {
-        return LoginTest::_getHeaders();
     }
 
     /**
@@ -51,6 +65,16 @@ class StoreTest extends TestCase
     public static function _getRightPassword()
     {
         return LoginTest::_getRightPassword();
+    }
+
+    /**
+     * @param int $size
+     * @return UploadedFile
+     * @throws Exception
+     */
+    public static function _generatePdfFile($size = 1): \Illuminate\Http\UploadedFile
+    {
+        return UploadedFile::fake()->create(\Ramsey\Uuid\Uuid::uuid4()->toString() . '.pdf', $size);
     }
 }
 
