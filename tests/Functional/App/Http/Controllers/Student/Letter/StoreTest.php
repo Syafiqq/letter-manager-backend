@@ -18,13 +18,10 @@ class StoreTest extends TestCase
     {
         $user = self::_getUserRepository()->take(1)->first();
         /** @var array $response */
-        $response = self::_doAuth($this, [
-            'credential' => $user->{'credential'},
-            'password' => self::_getRightPassword(),
-        ]);
+        $token = self::_doAuth($this, $user);
         $this->json('POST', self::_getRoute(),
             [],
-            self::_getHeaders($response['data']['token']))
+            self::_getHeaders($token))
             ->seeJson([
                 'code' => HttpStatus::UNPROCESSABLE_ENTITY,
             ]);
@@ -35,7 +32,7 @@ class StoreTest extends TestCase
         return path_route('student.letter.store.post');
     }
 
-    public static function _getHeaders($authorization = 'empty')
+    public static function _getHeaders(string $authorization = 'empty')
     {
         return array_merge(LoginTest::_getHeaders(), [
             'Authorization' => "Bearer $authorization"
@@ -44,12 +41,15 @@ class StoreTest extends TestCase
 
     /**
      * @param TestCase $case
-     * @param array $creds
-     * @return array
+     * @param \App\Eloquents\User $user
+     * @return string
      */
-    public static function _doAuth(TestCase $case, array $creds)
+    public static function _doAuth(TestCase $case, \App\Eloquents\User $user): string
     {
-        return LoginTest::_doAuth($case, $creds);
+        return LoginTest::_doAuth($case, [
+            'credential' => $user->{'credential'},
+            'password' => LoginTest::_getRightPassword(),
+        ])['data']['token'];
     }
 
     public static function _getUserRepository()
@@ -60,11 +60,6 @@ class StoreTest extends TestCase
         }
 
         return self::$users;
-    }
-
-    public static function _getRightPassword()
-    {
-        return LoginTest::_getRightPassword();
     }
 
     /**
