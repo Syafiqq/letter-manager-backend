@@ -10,6 +10,7 @@
 namespace App\Http\Controllers\Student;
 
 
+use App\Eloquents\Letter;
 use App\Http\Controllers\Controller;
 use App\Model\Popo\PopoMapper;
 use App\Model\Util\HttpStatus;
@@ -39,14 +40,15 @@ class LetterController extends Controller
      */
     public function postStore(Request $request)
     {
-        $vault = $this->validate($request, [
+        $letter = new \App\Eloquents\Letter();
+        $vault  = $this->validate($request, [
             'title' => 'bail|required',
             'code' => 'bail|required',
             'index' => 'bail|required',
             'number' => 'bail|required',
             'subject' => 'bail|required',
-            'date' => 'bail|required|date_format:"Y-m-d H:i:s"',
-            'kind' => "bail|required|in:incoming,outgoing",
+            'date' => 'bail|required|date_format:"' . $letter->getDateFormat() . '"',
+            'kind' => 'bail|required|in:' . implode(',', Letter::letterKind),
             'file' => 'bail|required|file|mimetypes:application/pdf|mimes:pdf',
         ]);
 
@@ -58,20 +60,19 @@ class LetterController extends Controller
             $dirname = $now->format('Ymd');
             $file->store("public/letters/{$dirname}");
 
-            $user                 = new \App\Eloquents\Letter();
-            $user->{'id'}         = Uuid::uuid1()->toString();
-            $user->{'title'}      = $vault['title'];
-            $user->{'code'}       = $vault['code'];
-            $user->{'index'}      = $vault['index'];
-            $user->{'number'}     = $vault['number'];
-            $user->{'subject'}    = $vault['subject'];
-            $user->{'date'}       = $vault['date'];
-            $user->{'kind'}       = $vault['kind'];
-            $user->{'file'}       = $file->path();
-            $user->{'created_at'} = $now;
-            $user->{'updated_at'} = $now;
-            $user->{'issuer'}     = $this->guard->user()->getAuthIdentifier();
-            $user->save();
+            $letter->{'id'}         = Uuid::uuid1()->toString();
+            $letter->{'title'}      = $vault['title'];
+            $letter->{'code'}       = $vault['code'];
+            $letter->{'index'}      = $vault['index'];
+            $letter->{'number'}     = $vault['number'];
+            $letter->{'subject'}    = $vault['subject'];
+            $letter->{'date'}       = $vault['date'];
+            $letter->{'kind'}       = $vault['kind'];
+            $letter->{'file'}       = $file->path();
+            $letter->{'created_at'} = $now;
+            $letter->{'updated_at'} = $now;
+            $letter->{'issuer'}     = $this->guard->user()->getAuthIdentifier();
+            $letter->save();
 
             return response()->json(PopoMapper::alertResponse(HttpStatus::OK, 'Letter added successfully'), HttpStatus::OK);
         }
