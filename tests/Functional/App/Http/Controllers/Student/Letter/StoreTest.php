@@ -14,6 +14,13 @@ class StoreTest extends TestCase
 {
     private static $users;
 
+    public function test_create_file()
+    {
+        $this->assertTrue(true);
+        $file = new UploadedFile(storage_path('app/public') . '/letters/20190328/example-letter-01.pdf', 'example-letter-01.pdf', 'application/pdf', null, null, true);
+        $this->assertNotNull($file);
+    }
+
     public function test_it_should_failed_store_due_to_empty_data()
     {
         $user = self::_getUserRepository()->take(1)->first();
