@@ -62,9 +62,11 @@ class StoreTest extends TestCase
             ->seeJson([
                 'code' => HttpStatus::OK,
             ]);
+        $resultPath = storage_path('app/public') . '/letters/20190328/' . $upload->hashName();
         $this->assertNotNull(\App\Eloquents\Letter::where('title', $title)->first());
+        $this->assertFileExists($resultPath);
         fclose($file);
-        @unlink(storage_path('app/public') . '/letters/20190328/' . $upload->hashName());
+        @unlink($resultPath);
         \App\Eloquents\Letter::where('title', $title)->delete();
     }
 
