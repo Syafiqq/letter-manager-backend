@@ -37,39 +37,6 @@ class StoreTest extends TestCase
     /**
      * @throws Exception
      */
-    public function test_create_file_test()
-    {
-        $file   = fopen(storage_path('app/public') . '/letters/20190328/example-letter-01.pdf', 'r');
-        $upload = new \Illuminate\Http\Testing\File('example-letter-01.pdf', $file);
-        $this->assertNotNull($file);
-        $this->assertNotNull($upload);
-
-        $user = self::_getUserRepository()->take(1)->first();
-        /** @var array $response */
-        $token = self::_doAuth($this, $user);
-        $this->call('POST', self::_getRoute(),
-            [
-                'title' => 'Title New',
-                'code' => 'Code New',
-                'index' => 'Index New',
-                'number' => 'Number New',
-                'subject' => 'Subject New',
-                'date' => '2019-03-28 04:04:04',
-                'kind' => \App\Eloquents\Letter::letterKind[0],
-            ], [], [
-                'upload' => $upload
-            ],
-            $this->transformHeadersToServerVars(self::_getHeaders($token)));
-        $this->seeJson([
-            'code' => HttpStatus::OK,
-        ]);
-        echo vj($this->response->content());
-        fclose($file);
-    }
-
-    /**
-     * @throws Exception
-     */
     public function test_it_should_success_store_letter()
     {
         $file   = fopen(storage_path('app/public') . '/letters/20190328/example-letter-01.pdf', 'r');
