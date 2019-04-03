@@ -40,4 +40,24 @@ abstract class TestCase extends Laravel\Lumen\Testing\TestCase
 
         return $this;
     }
+
+
+    /**
+     * Visit the given URI with a POST request.
+     *
+     * @param  string $uri
+     * @param  array $data
+     * @param  array $headers
+     * @param array $cookies
+     * @param array $files
+     * @return $this
+     */
+    public function cPost($uri, array $data = [], array $headers = [], array $cookies = [], array $files = [])
+    {
+        $server = $this->transformHeadersToServerVars($headers);
+
+        $this->call('POST', $uri, $data, $cookies, $files, $server);
+
+        return $this;
+    }
 }
