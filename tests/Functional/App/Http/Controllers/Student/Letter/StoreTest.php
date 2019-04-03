@@ -41,9 +41,11 @@ class StoreTest extends TestCase
 
     public static function _getHeaders(string $authorization = 'empty')
     {
-        return array_merge(LoginTest::_getHeaders(), [
-            'Authorization' => "Bearer $authorization"
-        ]);
+        return [
+            'Content-Type' => 'application/x-www-form-urlencoded',
+            'Accept' => 'application/json',
+            'Authorization' => "Bearer $authorization",
+        ];
     }
 
     /**
