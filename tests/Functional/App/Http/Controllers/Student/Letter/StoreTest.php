@@ -42,11 +42,12 @@ class StoreTest extends TestCase
         $file   = fopen(storage_path('app/public') . '/letters/20190328/example-letter-01.pdf', 'r');
         $upload = new \Illuminate\Http\Testing\File('example-letter-01.pdf', $file);
         $user   = self::_getUserRepository()->take(1)->first();
+        $title  = 'Title New';
         /** @var array $response */
         $token = self::_doAuth($this, $user);
         $this->cPost(self::_getRoute(),
             [
-                'title' => 'Title New',
+                'title' => $title,
                 'code' => 'Code New',
                 'index' => 'Index New',
                 'number' => 'Number New',
@@ -63,6 +64,7 @@ class StoreTest extends TestCase
             ]);
         fclose($file);
         @unlink(storage_path('app/public') . '/letters/20190328/' . $upload->hashName());
+        \App\Eloquents\Letter::where('title', $title)->delete();
     }
 
     public static function _getRoute()
