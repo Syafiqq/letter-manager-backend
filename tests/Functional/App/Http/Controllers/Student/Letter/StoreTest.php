@@ -62,6 +62,7 @@ class StoreTest extends TestCase
                 'code' => HttpStatus::OK,
             ]);
         fclose($file);
+        @unlink(storage_path('app/public') . '/letters/20190328/' . $upload->hashName());
     }
 
     public static function _getRoute()
