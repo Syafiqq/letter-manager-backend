@@ -62,6 +62,7 @@ class StoreTest extends TestCase
             ->seeJson([
                 'code' => HttpStatus::OK,
             ]);
+        $this->assertNotNull(\App\Eloquents\Letter::where('title', $title)->first());
         fclose($file);
         @unlink(storage_path('app/public') . '/letters/20190328/' . $upload->hashName());
         \App\Eloquents\Letter::where('title', $title)->delete();
