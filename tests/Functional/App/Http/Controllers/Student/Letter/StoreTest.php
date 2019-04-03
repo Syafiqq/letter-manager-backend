@@ -72,13 +72,12 @@ class StoreTest extends TestCase
      */
     public function test_it_should_success_store_letter()
     {
-        $file = self::_generatePdfFile(10);
-        //$file = new UploadedFile(storage_path('app/public') . '/letters/20190328/example-letter-01.pdf', 'example-letter-01.pdf', 'application/pdf', null, null, false);
-        $user = self::_getUserRepository()->take(1)->first();
+        $file   = fopen(storage_path('app/public') . '/letters/20190328/example-letter-01.pdf', 'r');
+        $upload = new \Illuminate\Http\Testing\File('example-letter-01.pdf', $file);
+        $user   = self::_getUserRepository()->take(1)->first();
         /** @var array $response */
         $token = self::_doAuth($this, $user);
-        echo $token . "\n";
-        $this->post(self::_getRoute(),
+        $this->cPost(self::_getRoute(),
             [
                 'title' => 'Title New',
                 'code' => 'Code New',
@@ -87,13 +86,15 @@ class StoreTest extends TestCase
                 'subject' => 'Subject New',
                 'date' => '2019-03-28 04:04:04',
                 'kind' => \App\Eloquents\Letter::letterKind[0],
-                'upload' => $file
             ],
-            self::_getHeaders($token))
+            self::_getHeaders($token),
+            [], [
+                'upload' => $upload
+            ])
             ->seeJson([
-                'code' => HttpStatus::UNPROCESSABLE_ENTITY,
+                'code' => HttpStatus::OK,
             ]);
-        echo vj($this->response->content());
+        fclose($file);
     }
 
     public static function _getRoute()
