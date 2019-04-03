@@ -49,13 +49,13 @@ class LetterController extends Controller
             'subject' => 'bail|required',
             'date' => 'bail|required|date_format:"' . $letter->getDateFormat() . '"',
             'kind' => 'bail|required|in:' . implode(',', Letter::letterKind),
-            'file' => 'bail|required|file|mimetypes:application/pdf|mimes:pdf',
+            'upload' => 'bail|required|file|mimetypes:application/pdf|mimes:pdf',
         ]);
 
-        if ($request->has('file') && $request->file('file')->isValid())
+        if ($request->hasFile('upload') && $request->file('upload')->isValid())
         {
             /** @var UploadedFile $file */
-            $file    = $request->file('file');
+            $file    = $request->file('upload');
             $now     = Carbon::now(env('APP_TIMEZONE', 'UTC'));
             $dirname = $now->format('Ymd');
             $file->store("public/letters/{$dirname}");
