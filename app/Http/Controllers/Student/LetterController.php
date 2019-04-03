@@ -58,7 +58,9 @@ class LetterController extends Controller
             $file    = $request->file('upload');
             $now     = Carbon::now(env('APP_TIMEZONE', 'UTC'));
             $dirname = Carbon::createFromFormat($letter->getDateFormat(), $vault['date'])->format('Ymd');
-            $file->store("public/letters/{$dirname}");
+            $dirmap  = env('STORAGE_NAME');
+            $dir     = "/letters/{$dirname}";
+            $file->store("public$dir");
 
             $letter->{'id'}         = Uuid::uuid1()->toString();
             $letter->{'title'}      = $vault['title'];
@@ -68,7 +70,7 @@ class LetterController extends Controller
             $letter->{'subject'}    = $vault['subject'];
             $letter->{'date'}       = $vault['date'];
             $letter->{'kind'}       = $vault['kind'];
-            $letter->{'file'}       = $file->path();
+            $letter->{'file'}       = "$dirmap$dir/" . $file->hashName();
             $letter->{'created_at'} = $now;
             $letter->{'updated_at'} = $now;
             $letter->{'issuer'}     = $this->guard->user()->getAuthIdentifier();
