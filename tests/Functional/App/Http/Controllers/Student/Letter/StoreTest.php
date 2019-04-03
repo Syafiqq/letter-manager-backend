@@ -70,6 +70,36 @@ class StoreTest extends TestCase
         \App\Eloquents\Letter::where('title', $title)->delete();
     }
 
+    /**
+     * @throws Exception
+     */
+    public function test_it_should_fail_store_due_to_invalid_extension()
+    {
+        $file   = fopen(storage_path('app') . '/.gitignore', 'r');
+        $upload = new \Illuminate\Http\Testing\File('.gitignore', $file);
+        $user   = self::_getUserRepository()->take(1)->first();
+        $title  = 'Title New';
+        /** @var array $response */
+        $token = self::_doAuth($this, $user);
+        $this->cPost(self::_getRoute(),
+            [
+                'title' => $title,
+                'code' => 'Code New',
+                'index' => 'Index New',
+                'number' => 'Number New',
+                'subject' => 'Subject New',
+                'date' => '2019-03-28 04:04:04',
+                'kind' => \App\Eloquents\Letter::letterKind[0],
+            ],
+            self::_getHeaders($token),
+            [], [
+                'upload' => $upload
+            ])
+            ->seeJson([
+                'code' => HttpStatus::UNPROCESSABLE_ENTITY,
+            ]);
+    }
+
     public static function _getRoute()
     {
         return path_route('student.letter.store.post');
