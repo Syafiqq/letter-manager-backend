@@ -11,8 +11,10 @@ class ExampleTest extends TestCase
     {
         $this->get('/');
 
-        $this->assertEquals(
-            $this->app->version(), $this->response->getContent()
-        );
+        $content = json_decode($this->response->getContent(), true);
+        $this->assertIsArray($content);
+        $this->assertArrayHasKey('data', $content);
+        $this->assertArrayHasKey('version', $content['data']);
+        $this->assertEquals($this->app->version(), $content['data']['version']);
     }
 }
