@@ -1,6 +1,13 @@
 <?php
 
+use App\Eloquent\User;
 use App\Model\Util\ClaimTable;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Exceptions\TokenExpiredException;
+use Tymon\JWTAuth\Exceptions\TokenInvalidException;
+use Tymon\JWTAuth\Factory;
+use Tymon\JWTAuth\JWTAuth;
+use Tymon\JWTAuth\Payload;
 
 /**
  * This <letter-manager-backend> project created by :
@@ -13,9 +20,9 @@ class JwtTest extends TestCase
 {
     public function test_encode()
     {
-        /** @var \Tymon\JWTAuth\Factory $factory */
+        /** @var Factory $factory */
         $factory = $this->app->make('tymon.jwt.payload.factory');
-        /** @var \Tymon\JWTAuth\JWTAuth $auth */
+        /** @var JWTAuth $auth */
         $auth   = $this->app->make('tymon.jwt.auth');
         $claims = self::_dummyClaims();
 
@@ -27,11 +34,11 @@ class JwtTest extends TestCase
     }
 
     /**
-     * @throws \Tymon\JWTAuth\Exceptions\JWTException
+     * @throws JWTException
      */
     public function test_parse()
     {
-        $user        = \App\Eloquents\User::take(1)->first();
+        $user        = User::take(1)->first();
         $stringToken = self::_generateToken($this, self::_dummyClaims($user->{'id'}));
         $request     = Helpers::createJsonRequest(
             'POST',
@@ -44,7 +51,7 @@ class JwtTest extends TestCase
             ]
         );
 
-        /** @var \Tymon\JWTAuth\JWTAuth $auth */
+        /** @var JWTAuth $auth */
         $auth = $this->app->make('tymon.jwt.auth');
         $auth->setRequest($request);
 
@@ -55,20 +62,20 @@ class JwtTest extends TestCase
         }
         else
         {
-            /** @var \Tymon\JWTAuth\Payload $payload */
+            /** @var Payload $payload */
             $payload = $auth->getPayload();
             $this->assertEquals($user->{'id'}, $payload->get(ClaimTable::SUBJECT));
         }
     }
 
     /**
-     * @throws \Tymon\JWTAuth\Exceptions\JWTException
+     * @throws JWTException
      */
     public function test_parse_expired()
     {
-        $this->expectException(\Tymon\JWTAuth\Exceptions\TokenExpiredException::class);
+        $this->expectException(TokenExpiredException::class);
 
-        $user        = \App\Eloquents\User::take(1)->first();
+        $user        = User::take(1)->first();
         $stringToken = self::_generateToken($this, self::_dummyClaims($user->{'id'}, 1));
         $request     = Helpers::createJsonRequest(
             'POST',
@@ -82,7 +89,7 @@ class JwtTest extends TestCase
         );
 
         sleep(2);
-        /** @var \Tymon\JWTAuth\JWTAuth $auth */
+        /** @var JWTAuth $auth */
         $auth = $this->app->make('tymon.jwt.auth');
         $auth->setRequest($request);
         $auth->parseToken();
@@ -90,13 +97,13 @@ class JwtTest extends TestCase
     }
 
     /**
-     * @throws \Tymon\JWTAuth\Exceptions\JWTException
+     * @throws JWTException
      */
     public function test_parse_invalidate()
     {
-        $this->expectException(\Tymon\JWTAuth\Exceptions\TokenInvalidException::class);
+        $this->expectException(TokenInvalidException::class);
 
-        $user        = \App\Eloquents\User::take(1)->first();
+        $user        = User::take(1)->first();
         $stringToken = self::_generateToken($this, self::_dummyClaims($user->{'id'}));
         $request     = Helpers::createJsonRequest(
             'POST',
@@ -109,7 +116,7 @@ class JwtTest extends TestCase
             ]
         );
 
-        /** @var \Tymon\JWTAuth\JWTAuth $auth */
+        /** @var JWTAuth $auth */
         $auth = $this->app->make('tymon.jwt.auth');
         $auth->setRequest($request);
         $auth->parseToken();
@@ -119,9 +126,9 @@ class JwtTest extends TestCase
 
     public static function _generateToken(TestCase $case, array $claims): string
     {
-        /** @var \Tymon\JWTAuth\Factory $factory */
+        /** @var Factory $factory */
         $factory = $case->app->make('tymon.jwt.payload.factory');
-        /** @var \Tymon\JWTAuth\JWTAuth $auth */
+        /** @var JWTAuth $auth */
         $auth    = $case->app->make('tymon.jwt.auth');
         $payload = $factory->customClaims($claims)->make();
         $encode  = $auth->manager()->encode($payload);

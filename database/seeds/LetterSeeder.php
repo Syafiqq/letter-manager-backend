@@ -1,6 +1,8 @@
 <?php
 
+use App\Eloquent\Letter;
 use Carbon\Carbon;
+use PhpOffice\PhpSpreadsheet\Reader\Csv;
 
 /**
  * This <letter-manager-backend> project created by :
@@ -21,7 +23,7 @@ class LetterSeeder extends RollbackAbleSeeder
     public function run()
     {
         $inputFileName = __DIR__ . '/../vault/LetterVault.csv';
-        $reader        = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
+        $reader        = new Csv();
         $reader->setDelimiter(';');
         $reader->setReadEmptyCells(true);
         $reader->setReadDataOnly(true);
@@ -34,7 +36,7 @@ class LetterSeeder extends RollbackAbleSeeder
             {
                 $val[] = $cell->getValue();
             }
-            $model                 = new \App\Eloquents\Letter();
+            $model                 = new Letter();
             $model->{'id'}         = $val[0];
             $model->{'title'}      = $val[1];
             $model->{'code'}       = $val[2];
@@ -55,7 +57,7 @@ class LetterSeeder extends RollbackAbleSeeder
 
     function roll()
     {
-        \App\Eloquents\Letter::query()->delete();
+        Letter::query()->delete();
     }
 }
 

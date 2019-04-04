@@ -1,6 +1,8 @@
 <?php
 
+use App\Eloquent\User;
 use Carbon\Carbon;
+use PhpOffice\PhpSpreadsheet\Reader\Csv;
 
 class UserStudentSeeder extends RollbackAbleSeeder
 {
@@ -14,7 +16,7 @@ class UserStudentSeeder extends RollbackAbleSeeder
     public function run()
     {
         $inputFileName = __DIR__ . '/../vault/UserVault.csv';
-        $reader        = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
+        $reader        = new Csv();
         $reader->setDelimiter(';');
         $reader->setReadEmptyCells(true);
         $reader->setReadDataOnly(true);
@@ -27,7 +29,7 @@ class UserStudentSeeder extends RollbackAbleSeeder
             {
                 $val[] = $cell->getValue();
             }
-            $model                     = new \App\Eloquents\User();
+            $model                    = new User();
             $model->{'id'}            = $val[0];
             $model->{'credential'}    = $val[1];
             $model->{'email'}         = $val[2];
@@ -48,6 +50,6 @@ class UserStudentSeeder extends RollbackAbleSeeder
 
     function roll()
     {
-        \App\Eloquents\User::query()->delete();
+        User::query()->delete();
     }
 }

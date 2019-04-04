@@ -10,18 +10,19 @@
 namespace App\Http\Middleware;
 
 
-use App\Eloquents\User;
+use App\Eloquent\User;
 use App\Model\Popo\PopoMapper;
 use App\Model\Util\HttpStatus;
 use Closure;
+use Illuminate\Http\Request;
 
 class ValidAuthRecoveryMiddleware
 {
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \Closure $next
+     * @param Request $request
+     * @param Closure $next
      * @return mixed
      */
     public function handle($request, Closure $next)

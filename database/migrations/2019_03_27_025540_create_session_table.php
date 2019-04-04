@@ -1,14 +1,16 @@
 <?php
 
+use App\Eloquent\Session;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateSessionTable extends Migration
 {
     /**
      * @var string
      */
-    static $tableName = \App\Eloquents\Session::table;
+    static $tableName = Session::table;
     /**
      * @var Illuminate\Database\Schema\Builder
      */
@@ -19,7 +21,7 @@ class CreateSessionTable extends Migration
      */
     public function __construct()
     {
-        $this->schema = \Illuminate\Support\Facades\Schema::getFacadeRoot();
+        $this->schema = Schema::getFacadeRoot();
     }
 
     /**

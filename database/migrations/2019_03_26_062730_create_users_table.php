@@ -1,14 +1,16 @@
 <?php
 
+use App\Eloquent\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateUsersTable extends Migration
 {
     /**
      * @var string
      */
-    static $tableName = \App\Eloquents\User::table;
+    static $tableName = User::table;
     /**
      * @var Illuminate\Database\Schema\Builder
      */
@@ -19,7 +21,7 @@ class CreateUsersTable extends Migration
      */
     public function __construct()
     {
-        $this->schema = \Illuminate\Support\Facades\Schema::getFacadeRoot();
+        $this->schema = Schema::getFacadeRoot();
     }
 
     /**
@@ -36,8 +38,8 @@ class CreateUsersTable extends Migration
                 $table->string('credential', 100)->unique();
                 $table->string('email', 100)->nullable();
                 $table->string('name', 100);
-                $table->enum('gender', \App\Eloquents\User::genders);
-                $table->enum('role', \App\Eloquents\User::roles);
+                $table->enum('gender', User::genders);
+                $table->enum('role', User::roles);
                 $table->uuid('stamp');
                 $table->string('avatar', 100)->nullable();
                 $table->string('password', 60);

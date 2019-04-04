@@ -10,12 +10,14 @@
 namespace App\Http\Controllers\Student;
 
 
-use App\Eloquents\Letter;
+use App\Eloquent\Letter;
 use App\Http\Controllers\Controller;
 use App\Model\Popo\PopoMapper;
 use App\Model\Util\HttpStatus;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Contracts\Auth\Guard;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Ramsey\Uuid\Uuid;
@@ -35,12 +37,12 @@ class LetterController extends Controller
 
     /**
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Exception
+     * @return JsonResponse
+     * @throws Exception
      */
     public function postStore(Request $request)
     {
-        $letter = new \App\Eloquents\Letter();
+        $letter = new Letter();
         $vault  = $this->validate($request, [
             'title' => 'bail|required',
             'code' => 'bail|required',

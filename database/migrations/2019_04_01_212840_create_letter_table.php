@@ -1,14 +1,16 @@
 <?php
 
+use App\Eloquent\Letter;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateLetterTable extends Migration
 {
     /**
      * @var string
      */
-    static $tableName = \App\Eloquents\Letter::table;
+    static $tableName = Letter::table;
     /**
      * @var Illuminate\Database\Schema\Builder
      */
@@ -19,7 +21,7 @@ class CreateLetterTable extends Migration
      */
     public function __construct()
     {
-        $this->schema = \Illuminate\Support\Facades\Schema::getFacadeRoot();
+        $this->schema = Schema::getFacadeRoot();
     }
 
     /**
@@ -39,7 +41,7 @@ class CreateLetterTable extends Migration
                 $table->string('number');
                 $table->string('subject');
                 $table->dateTime('date');
-                $table->enum('kind', \App\Eloquents\Letter::letterKind);
+                $table->enum('kind', Letter::letterKind);
                 $table->string('file');
                 $table->timestamp('created_at');
                 $table->timestamp('updated_at');

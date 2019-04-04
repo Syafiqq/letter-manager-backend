@@ -14,13 +14,17 @@ use App\Model\Util\ClaimTable;
 use App\Model\Util\HttpStatus;
 use App\Model\Util\Session;
 use Closure;
+use Exception;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
+use Tymon\JWTAuth\JWTAuth;
 use Tymon\JWTAuth\Payload;
 
 class JWTAuthenticateMiddleware extends \Tymon\JWTAuth\Http\Middleware\Authenticate
 {
     protected $auth;
 
-    public function __construct(\Tymon\JWTAuth\JWTAuth $auth)
+    public function __construct(JWTAuth $auth)
     {
         parent::__construct($auth);
         $this->auth = $auth;
@@ -29,13 +33,13 @@ class JWTAuthenticateMiddleware extends \Tymon\JWTAuth\Http\Middleware\Authentic
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \Closure $next
+     * @param Request $request
+     * @param Closure $next
      * @param  string $role
      *
-     * @throws \Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException
-     *
      * @return mixed
+     * @throws UnauthorizedHttpException
+     *
      */
     public function handle($request, Closure $next, $role = null)
     {
@@ -48,10 +52,10 @@ class JWTAuthenticateMiddleware extends \Tymon\JWTAuth\Http\Middleware\Authentic
         }
         try
         {
-            $sess             = \App\Eloquents\Session::where('id', $payload->get(ClaimTable::SESSION))->first();
+            $sess             = \App\Eloquent\Session::where('id', $payload->get(ClaimTable::SESSION))->first();
             Session::$session = json_decode($sess == null ? '{}' : $sess->{'storage'} ?? '{}', true) ?? [];
         }
-        catch (\Exception $_)
+        catch (Exception $_)
         {
             Session::$session = [];
         }

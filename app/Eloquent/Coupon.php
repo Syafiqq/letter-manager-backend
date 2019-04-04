@@ -7,10 +7,11 @@
  * Github       : syafiqq
  */
 
-namespace App\Eloquents;
+namespace App\Eloquent;
 
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Coupon extends Model
 {
@@ -80,11 +81,11 @@ class Coupon extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function users()
     {
-        return $this->belongsTo('\App\Eloquents\User', 'assignee', 'id');
+        return $this->belongsTo('\App\Eloquent\User', 'assignee', 'id');
     }
 
     public function getHumanReadableUsage()

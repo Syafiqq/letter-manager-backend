@@ -1,6 +1,8 @@
 <?php
 
+use App\Eloquent\Coupon;
 use Carbon\Carbon;
+use PhpOffice\PhpSpreadsheet\Reader\Csv;
 
 class CouponSeeder extends RollbackAbleSeeder
 {
@@ -14,7 +16,7 @@ class CouponSeeder extends RollbackAbleSeeder
     public function run()
     {
         $inputFileName = __DIR__ . '/../vault/CouponVault.csv';
-        $reader        = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
+        $reader        = new Csv();
         $reader->setDelimiter(';');
         $reader->setReadEmptyCells(true);
         $reader->setReadDataOnly(true);
@@ -27,7 +29,7 @@ class CouponSeeder extends RollbackAbleSeeder
             {
                 $val[] = $cell->getValue();
             }
-            $model                 = new \App\Eloquents\Coupon();
+            $model                 = new Coupon();
             $model->{'id'}         = $val[0];
             $model->{'coupon'}     = $val[1];
             $model->{'assignee'}   = $val[2];
@@ -41,6 +43,6 @@ class CouponSeeder extends RollbackAbleSeeder
 
     function roll()
     {
-        \App\Eloquents\Coupon::query()->delete();
+        Coupon::query()->delete();
     }
 }

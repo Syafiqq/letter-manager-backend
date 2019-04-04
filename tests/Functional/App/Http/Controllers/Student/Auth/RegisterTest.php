@@ -1,5 +1,7 @@
 <?php
 
+use App\Eloquent\Coupon;
+use App\Eloquent\User;
 use App\Model\Util\HttpStatus;
 
 /**
@@ -37,7 +39,7 @@ class RegisterTest extends TestCase
 
     public function test_it_should_fail_register_missing_required_data()
     {
-        /** @var \App\Eloquents\User $user */
+        /** @var User $user */
         $user = self::_getUserRepository()->take(1)->first();
         /** @var $response */
         $this->json('POST', self::_getRoute(),
@@ -58,9 +60,9 @@ class RegisterTest extends TestCase
 
     public function test_it_should_success_register()
     {
-        /** @var \App\Eloquents\User $user */
+        /** @var User $user */
         $user = self::_getUserRepository()->take(1)->first();
-        /** @var \App\Eloquents\Coupon $coupon */
+        /** @var Coupon $coupon */
         $coupon = self::_getCouponRepository()->firstWhere('usage', $user->{'role'});
         /** @var $response */
         $this->json('POST', self::_getRoute(),
@@ -79,14 +81,14 @@ class RegisterTest extends TestCase
                 'code' => HttpStatus::OK,
             ]);
         self::_removeNewUser();
-        \App\Eloquents\Coupon::insert($coupon->toArray());
+        Coupon::insert($coupon->toArray());
     }
 
     public function test_it_should_fail_register_due_to_already_exists()
     {
-        /** @var \App\Eloquents\User $user */
+        /** @var User $user */
         $user = self::_getUserRepository()->take(1)->first();
-        /** @var \App\Eloquents\Coupon $coupon */
+        /** @var Coupon $coupon */
         $coupon = self::_getCouponRepository()->firstWhere('usage', $user->{'role'});
         /** @var $response */
         $this->json('POST', self::_getRoute(),
@@ -140,7 +142,7 @@ class RegisterTest extends TestCase
     {
         if (self::$coupons == null)
         {
-            self::$coupons = \App\Eloquents\Coupon::all();
+            self::$coupons = Coupon::all();
         }
 
         return self::$coupons;
@@ -158,7 +160,7 @@ class RegisterTest extends TestCase
 
     public static function _removeNewUser()
     {
-        \App\Eloquents\User::where('credential', self::_getNewUserCredential())->delete();
+        User::where('credential', self::_getNewUserCredential())->delete();
     }
 }
 

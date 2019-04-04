@@ -1,6 +1,9 @@
 <?php
 
+use App\Eloquent\User;
+use App\Http\Controllers\Student\Auth;
 use App\Model\Util\HttpStatus;
+use Illuminate\Validation\ValidationException;
 
 /**
  * This <letter-manager-backend> project created by :
@@ -36,15 +39,15 @@ class LoginTest extends TestCase
      */
     public function test_login_with_empty_data()
     {
-        $this->expectException(\Illuminate\Validation\ValidationException::class);
+        $this->expectException(ValidationException::class);
 
         $request = Helpers::createJsonRequest(
             'POST',
             null,
             self::_getRoute()
         );
-        /** @var \App\Http\Controllers\Student\Auth $controller */
-        $controller = $this->app->make(\App\Http\Controllers\Student\Auth::class);
+        /** @var Auth $controller */
+        $controller = $this->app->make(Auth::class);
 
         $controller->postLogin($request);
 
@@ -66,7 +69,7 @@ class LoginTest extends TestCase
             ],
             self::_getRoute()
         );
-        $controller = $this->app->make(\App\Http\Controllers\Student\Auth::class);
+        $controller = $this->app->make(Auth::class);
 
         $response = $controller->postLogin($request);
         $this->assertEquals(HttpStatus::OK, $response->status());
@@ -172,7 +175,7 @@ class LoginTest extends TestCase
     {
         if (self::$users == null)
         {
-            self::$users = \App\Eloquents\User::all();
+            self::$users = User::all();
         }
 
         return self::$users;

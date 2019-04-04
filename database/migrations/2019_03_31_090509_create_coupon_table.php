@@ -1,14 +1,16 @@
 <?php
 
+use App\Eloquent\Coupon;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateCouponTable extends Migration
 {
     /**
      * @var string
      */
-    static $tableName = \App\Eloquents\Coupon::table;
+    static $tableName = Coupon::table;
     /**
      * @var Illuminate\Database\Schema\Builder
      */
@@ -19,7 +21,7 @@ class CreateCouponTable extends Migration
      */
     public function __construct()
     {
-        $this->schema = \Illuminate\Support\Facades\Schema::getFacadeRoot();
+        $this->schema = Schema::getFacadeRoot();
     }
 
     /**
@@ -35,7 +37,7 @@ class CreateCouponTable extends Migration
                 $table->uuid('id');
                 $table->string('coupon', 20)->unique();
                 $table->uuid('assignee');
-                $table->enum('usage', \App\Eloquents\Coupon::usages);
+                $table->enum('usage', Coupon::usages);
                 $table->timestamp('created_at');
                 $table->primary('id');
                 $table->foreign('assignee')

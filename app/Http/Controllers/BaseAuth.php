@@ -10,16 +10,20 @@
 namespace App\Http\Controllers;
 
 
-use App\Eloquents\Coupon;
-use App\Eloquents\Session;
-use App\Eloquents\User;
+use App\Eloquent\Coupon;
+use App\Eloquent\Session;
+use App\Eloquent\User;
 use App\Model\Popo\PopoMapper;
 use App\Model\Util\ClaimTable;
 use App\Model\Util\HttpStatus;
+use Exception;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use Ramsey\Uuid\Uuid;
 use Tymon\JWTAuth\Factory;
 use Tymon\JWTAuth\JWTAuth;
@@ -46,9 +50,9 @@ abstract class BaseAuth extends Controller
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Exception
+     * @param Request $request
+     * @return JsonResponse
+     * @throws Exception
      */
     public function postLogin(Request $request)
     {
@@ -81,8 +85,8 @@ abstract class BaseAuth extends Controller
 
     /**
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Exception
+     * @return JsonResponse
+     * @throws Exception
      */
     public function postRegister(Request $request)
     {
@@ -117,7 +121,7 @@ abstract class BaseAuth extends Controller
     }
 
     /**
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function postRefresh()
     {
@@ -126,9 +130,9 @@ abstract class BaseAuth extends Controller
 
     /**
      * @param Request $request
-     * @return $this|\Illuminate\Http\RedirectResponse
-     * @throws \Illuminate\Validation\ValidationException
-     * @throws \Exception
+     * @return $this|RedirectResponse
+     * @throws ValidationException
+     * @throws Exception
      */
     public function postLost(Request $request)
     {
@@ -146,8 +150,8 @@ abstract class BaseAuth extends Controller
 
     /**
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Illuminate\Validation\ValidationException
+     * @return JsonResponse
+     * @throws ValidationException
      */
     public function patchRecover(Request $request)
     {
@@ -167,7 +171,7 @@ abstract class BaseAuth extends Controller
 
     /**
      * @param Guard $auth
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function postLogout(Guard $auth)
     {
@@ -180,7 +184,7 @@ abstract class BaseAuth extends Controller
 
     /**
      * @param Token $token
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     protected function respondWithToken(Token $token)
     {

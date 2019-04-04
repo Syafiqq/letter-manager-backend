@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Eloquents;
+namespace App\Eloquent;
 
+use Exception;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
@@ -163,12 +164,12 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
     public function session()
     {
-        return $this->hasMany('\App\Eloquents\Session', 'issuer', 'id');
+        return $this->hasMany('\App\Eloquent\Session', 'issuer', 'id');
     }
 
     /**
      * @return User
-     * @throws \Exception
+     * @throws Exception
      */
     public function generateRecoveryCode()
     {

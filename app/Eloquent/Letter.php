@@ -7,7 +7,7 @@
  * Github       : syafiqq
  */
 
-namespace App\Eloquents;
+namespace App\Eloquent;
 
 use Illuminate\Database\Eloquent\Model;
 

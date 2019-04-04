@@ -1,7 +1,7 @@
 <?php
 
-use App\Eloquents\Letter;
-use App\Eloquents\User;
+use App\Eloquent\Letter;
+use App\Eloquent\User;
 use App\Model\Util\HttpStatus;
 use Illuminate\Http\Testing\File;
 use Illuminate\Http\UploadedFile;

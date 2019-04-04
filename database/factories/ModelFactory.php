@@ -11,7 +11,7 @@
 |
 */
 
-$factory->define(App\Eloquents\User::class, function (Faker\Generator $faker) {
+$factory->define(App\Eloquent\User::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->name,
         'email' => $faker->email,

@@ -1,6 +1,8 @@
 <?php
 
+use App\Eloquent\User;
 use App\Model\Util\HttpStatus;
+use Ramsey\Uuid\Uuid;
 
 /**
  * This <letter-manager-backend> project created by :
@@ -51,9 +53,9 @@ class RecoverTest extends TestCase
     public function test_it_should_fail_recover_missing_required_data()
     {
         $actual        = self::_getUserRepository()->take(1)->first();
-        $lost_password = \Ramsey\Uuid\Uuid::uuid4();
+        $lost_password = Uuid::uuid4();
 
-        \App\Eloquents\User::where(['id' => $actual->{'id'}])->update(['lost_password' => $lost_password]);
+        User::where(['id' => $actual->{'id'}])->update(['lost_password' => $lost_password]);
         $this->json('PATCH', self::_getRoute(),
             [
                 'token' => $lost_password,
@@ -62,7 +64,7 @@ class RecoverTest extends TestCase
             ->seeJson([
                 'code' => HttpStatus::UNPROCESSABLE_ENTITY,
             ]);
-        \App\Eloquents\User::where(['id' => $actual->{'id'}])->update(['lost_password' => $actual->{'lost_password'}]);
+        User::where(['id' => $actual->{'id'}])->update(['lost_password' => $actual->{'lost_password'}]);
     }
 
     /**
@@ -71,9 +73,9 @@ class RecoverTest extends TestCase
     public function test_it_should_success_recover()
     {
         $actual        = self::_getUserRepository()->take(1)->first();
-        $lost_password = \Ramsey\Uuid\Uuid::uuid4();
+        $lost_password = Uuid::uuid4();
 
-        \App\Eloquents\User::where(['id' => $actual->{'id'}])->update(['lost_password' => $lost_password]);
+        User::where(['id' => $actual->{'id'}])->update(['lost_password' => $lost_password]);
         $this->json('PATCH', self::_getRoute(),
             [
                 'token' => $lost_password,
@@ -85,7 +87,7 @@ class RecoverTest extends TestCase
                 'code' => HttpStatus::OK,
             ]);
         $hash = $this->app->make('hash');
-        \App\Eloquents\User::where(['id' => $actual->{'id'}])->update([
+        User::where(['id' => $actual->{'id'}])->update([
             'lost_password' => $actual->{'lost_password'},
             'password' => $hash->make(self::_getRightPassword(), [])
         ]);

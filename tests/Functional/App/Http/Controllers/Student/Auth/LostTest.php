@@ -1,6 +1,6 @@
 <?php
 
-use App\Eloquents\User;
+use App\Eloquent\User;
 use App\Model\Util\HttpStatus;
 
 /**

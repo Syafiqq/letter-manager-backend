@@ -7,10 +7,11 @@
  * Github       : syafiqq
  */
 
-namespace App\Eloquents;
+namespace App\Eloquent;
 
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Session extends Model
 {
@@ -77,11 +78,11 @@ class Session extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function users()
     {
-        return $this->belongsTo('\App\Eloquents\User', 'issuer', 'id');
+        return $this->belongsTo('\App\Eloquent\User', 'issuer', 'id');
     }
 }
 
