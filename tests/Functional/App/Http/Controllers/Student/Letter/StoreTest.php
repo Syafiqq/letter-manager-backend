@@ -1,7 +1,11 @@
 <?php
 
+use App\Eloquents\Letter;
+use App\Eloquents\User;
 use App\Model\Util\HttpStatus;
+use Illuminate\Http\Testing\File;
 use Illuminate\Http\UploadedFile;
+use Ramsey\Uuid\Uuid;
 
 /**
  * This <letter-manager-backend> project created by :
@@ -40,7 +44,7 @@ class StoreTest extends TestCase
     public function test_it_should_success_store_letter()
     {
         $file   = fopen(storage_path('app/public') . '/letters/20190328/example-letter-01.pdf', 'r');
-        $upload = new \Illuminate\Http\Testing\File('example-letter-01.pdf', $file);
+        $upload = new File('example-letter-01.pdf', $file);
         $user   = self::_getUserRepository()->take(1)->first();
         $title  = 'Title New';
         /** @var array $response */
@@ -53,7 +57,7 @@ class StoreTest extends TestCase
                 'number' => 'Number New',
                 'subject' => 'Subject New',
                 'date' => '2019-03-28 04:04:04',
-                'kind' => \App\Eloquents\Letter::letterKind[0],
+                'kind' => Letter::letterKind[0],
             ],
             self::_getHeaders($token),
             [], [
@@ -63,11 +67,11 @@ class StoreTest extends TestCase
                 'code' => HttpStatus::OK,
             ]);
         $resultPath = storage_path('app/public') . '/letters/20190328/' . $upload->hashName();
-        $this->assertNotNull(\App\Eloquents\Letter::where('title', $title)->first());
+        $this->assertNotNull(Letter::where('title', $title)->first());
         $this->assertFileExists($resultPath);
         fclose($file);
         @unlink($resultPath);
-        \App\Eloquents\Letter::where('title', $title)->delete();
+        Letter::where('title', $title)->delete();
     }
 
     /**
@@ -76,7 +80,7 @@ class StoreTest extends TestCase
     public function test_it_should_fail_store_due_to_invalid_extension()
     {
         $file   = fopen(storage_path('app') . '/.gitignore', 'r');
-        $upload = new \Illuminate\Http\Testing\File('.gitignore', $file);
+        $upload = new File('.gitignore', $file);
         $user   = self::_getUserRepository()->take(1)->first();
         $title  = 'Title New';
         /** @var array $response */
@@ -89,7 +93,36 @@ class StoreTest extends TestCase
                 'number' => 'Number New',
                 'subject' => 'Subject New',
                 'date' => '2019-03-28 04:04:04',
-                'kind' => \App\Eloquents\Letter::letterKind[0],
+                'kind' => Letter::letterKind[0],
+            ],
+            self::_getHeaders($token),
+            [], [
+                'upload' => $upload
+            ])
+            ->seeJson([
+                'code' => HttpStatus::UNPROCESSABLE_ENTITY,
+            ]);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function test_it_should_fail_store_due_to_incomplete_data()
+    {
+        $file   = fopen(storage_path('app') . '/.gitignore', 'r');
+        $upload = new File('.gitignore', $file);
+        $user   = self::_getUserRepository()->take(1)->first();
+        $title  = 'Title New';
+        /** @var array $response */
+        $token = self::_doAuth($this, $user);
+        $this->cPost(self::_getRoute(),
+            [
+                'title' => $title,
+                'code' => 'Code New',
+                'index' => 'Index New',
+                'number' => 'Number New',
+                'subject' => 'Subject New',
+                'date' => '2019-03-28 04:04:04',
             ],
             self::_getHeaders($token),
             [], [
@@ -116,10 +149,10 @@ class StoreTest extends TestCase
 
     /**
      * @param TestCase $case
-     * @param \App\Eloquents\User $user
+     * @param User $user
      * @return string
      */
-    public static function _doAuth(TestCase $case, \App\Eloquents\User $user): string
+    public static function _doAuth(TestCase $case, User $user): string
     {
         return LoginTest::_doAuth($case, [
             'credential' => $user->{'credential'},
@@ -142,9 +175,9 @@ class StoreTest extends TestCase
      * @return UploadedFile
      * @throws Exception
      */
-    public static function _generatePdfFile($size = 1): \Illuminate\Http\UploadedFile
+    public static function _generatePdfFile($size = 1): UploadedFile
     {
-        return UploadedFile::fake()->create(\Ramsey\Uuid\Uuid::uuid4()->toString() . '.pdf', $size);
+        return UploadedFile::fake()->create(Uuid::uuid4()->toString() . '.pdf', $size);
     }
 }
 
