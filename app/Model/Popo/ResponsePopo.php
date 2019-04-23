@@ -34,6 +34,19 @@ class ResponsePopo
         $this->notify = $notify;
         $this->alert  = $alert;
     }
+
+    public function __sleep(): array
+    {
+        return [
+            'code' => $this->code,
+            'status' => $this->status,
+            'data' => $this->data,
+            'notify' => $this->notify,
+            'alert' => $this->alert
+        ];
+    }
+
+
 }
 
 ?>
