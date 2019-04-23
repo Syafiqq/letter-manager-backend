@@ -22,7 +22,7 @@ class PopoMapper
      * @param array $data
      * @param array $notify
      * @param array $alert
-     * @return array
+     * @return ResponsePopo
      */
     static function notifResponse($code = 200, $status = 'Empty Status', $data = [], $notify = [], $alert = [])
     {
@@ -40,7 +40,7 @@ class PopoMapper
      * @param array $data
      * @param array $notify
      * @param array $alert
-     * @return array
+     * @return ResponsePopo
      */
     static function jsonResponse($code = 200, $status = 'Empty Status', $data = [], $notify = [], $alert = [])
     {
@@ -56,7 +56,7 @@ class PopoMapper
      * @param array $data
      * @param array $notify
      * @param array $alert
-     * @return array
+     * @return ResponsePopo
      */
     static function alertResponse($code = 200, $status = 'Empty Status', $data = [], $notify = [], $alert = [])
     {
@@ -127,11 +127,11 @@ class PopoMapper
      * @param array $data
      * @param array $notify
      * @param array $alert
-     * @return array
+     * @return ResponsePopo
      */
     private static function _jsonResponse(int $code, string $status, array $data, array $notify, array $alert)
     {
-        return compact('code', 'status', 'data', 'notify', 'alert');
+        return new ResponsePopo($code, $status, $data, $notify, $alert);
     }
 }
 
