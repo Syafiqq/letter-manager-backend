@@ -13,6 +13,8 @@ namespace App\Http\Middleware;
 use App\Model\Popo\PopoMapper;
 use App\Model\Util\HttpStatus;
 use Closure;
+use Exception;
+use Illuminate\Http\Request;
 use Tymon\JWTAuth\Http\Middleware\Check;
 use Tymon\JWTAuth\JWTAuth;
 
@@ -31,8 +33,8 @@ class GuestMiddleware extends Check
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \Closure $next
+     * @param Request $request
+     * @param Closure $next
      * @return mixed
      */
     public function handle($request, Closure $next)
@@ -43,10 +45,10 @@ class GuestMiddleware extends Check
             {
                 if ($this->auth->parseToken()->authenticate() != null)
                 {
-                    return response()->json(PopoMapper::alertResponse(HttpStatus::FORBIDDEN, 'Can\'t access this page'), HttpStatus::FORBIDDEN);
+                    return response()->json(PopoMapper::alertResponse(HttpStatus::FORBIDDEN, 'Can\'t access this page')->serialize(), HttpStatus::FORBIDDEN);
                 }
             }
-            catch (\Exception $_)
+            catch (Exception $_)
             {
                 //
             }

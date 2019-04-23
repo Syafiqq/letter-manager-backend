@@ -7,9 +7,11 @@ use App\Model\Util\HttpStatus;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class Handler extends ExceptionHandler
@@ -31,7 +33,7 @@ class Handler extends ExceptionHandler
      *
      * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
      *
-     * @param  \Exception $exception
+     * @param Exception $exception
      * @return void
      * @throws Exception
      */
@@ -43,9 +45,9 @@ class Handler extends ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \Exception $exception
-     * @return \Illuminate\Http\Response|\Symfony\Component\HttpFoundation\Response
+     * @param Request $request
+     * @param Exception $exception
+     * @return \Illuminate\Http\Response|Response
      */
     public function render($request, Exception $exception)
     {
@@ -57,15 +59,15 @@ class Handler extends ExceptionHandler
             switch (get_class($exception))
             {
                 case ModelNotFoundException::class :
-                    return response()->json(PopoMapper::alertResponse(HttpStatus::NOT_FOUND, 'Resource Not Found'), HttpStatus::NOT_FOUND);
+                    return response()->json(PopoMapper::alertResponse(HttpStatus::NOT_FOUND, 'Resource Not Found')->serialize(), HttpStatus::NOT_FOUND);
                 case ValidationException::class :
                     /** @var ValidationException $exception */
-                    return response()->json(PopoMapper::jsonResponse($statusCode, strlen($exception->getMessage()) < 1 ? 'Invalid Data' : $exception->getMessage(), $exception->errors(), [], ['Invalid form request']), $statusCode);
+                    return response()->json(PopoMapper::jsonResponse($statusCode, strlen($exception->getMessage()) < 1 ? 'Invalid Data' : $exception->getMessage(), $exception->errors(), [], ['Invalid form request'])->serialize(), $statusCode);
                 case AuthorizationException::class :
                     /** @var AuthorizationException $exception */
-                    return response()->json(PopoMapper::alertResponse(HttpStatus::NOT_FOUND, strlen($exception->getMessage()) < 1 ? 'Unknown Request' : $exception->getMessage()), HttpStatus::FORBIDDEN);
+                    return response()->json(PopoMapper::alertResponse(HttpStatus::NOT_FOUND, strlen($exception->getMessage()) < 1 ? 'Unknown Request' : $exception->getMessage())->serialize(), HttpStatus::FORBIDDEN);
                 default :
-                    return response()->json(PopoMapper::alertResponse($statusCode, strlen($exception->getMessage()) < 1 ? 'Unknown Request' : $exception->getMessage()), $statusCode);
+                    return response()->json(PopoMapper::alertResponse($statusCode, strlen($exception->getMessage()) < 1 ? 'Unknown Request' : $exception->getMessage())->serialize(), $statusCode);
             }
         }
         else

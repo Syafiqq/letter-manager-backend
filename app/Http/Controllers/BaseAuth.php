@@ -56,7 +56,7 @@ abstract class BaseAuth extends Controller
      */
     public function postLogin(Request $request)
     {
-        $response = response()->json(PopoMapper::alertResponse(HttpStatus::NOT_FOUND, 'Unknown User'), HttpStatus::UNAUTHORIZED);
+        $response = response()->json(PopoMapper::alertResponse(HttpStatus::NOT_FOUND, 'Unknown User')->serialize(), HttpStatus::UNAUTHORIZED);
 
         $credentials = $this->validate($request, [
             'credential' => 'bail|required|max:100',
@@ -69,7 +69,7 @@ abstract class BaseAuth extends Controller
         $user = User::where('credential', $credentials['credential'])->where('role', $credentials['role'])->first();
         if (!$user)
         {
-            return response()->json(PopoMapper::alertResponse(HttpStatus::BAD_REQUEST, 'Cannot find user with provided credential'), HttpStatus::BAD_REQUEST);
+            return response()->json(PopoMapper::alertResponse(HttpStatus::BAD_REQUEST, 'Cannot find user with provided credential')->serialize(), HttpStatus::BAD_REQUEST);
         }
         if (!$this->hashManager->check($credentials['password'], $user->{'password'}))
         {
@@ -117,7 +117,7 @@ abstract class BaseAuth extends Controller
         $user->{'password'}   = $this->hashManager->make($credentials['password'], []);
         $user->save();
 
-        return response()->json(PopoMapper::alertResponse(HttpStatus::OK, 'User register successfully'), HttpStatus::OK);
+        return response()->json(PopoMapper::alertResponse(HttpStatus::OK, 'User register successfully')->serialize(), HttpStatus::OK);
     }
 
     /**
@@ -125,7 +125,7 @@ abstract class BaseAuth extends Controller
      */
     public function postRefresh()
     {
-        return response()->json(PopoMapper::jsonResponse(HttpStatus::OK, ''), HttpStatus::OK);
+        return response()->json(PopoMapper::jsonResponse(HttpStatus::OK, '')->serialize(), HttpStatus::OK);
     }
 
     /**
@@ -145,7 +145,7 @@ abstract class BaseAuth extends Controller
         $user = User::where('credential', $credentials['credential'])->first();
         $user->generateRecoveryCode()->save();
 
-        return response()->json(PopoMapper::alertResponse(HttpStatus::OK, 'User will be processed', ['recovery_token' => $user['lost_password']]), HttpStatus::OK);
+        return response()->json(PopoMapper::alertResponse(HttpStatus::OK, 'User will be processed', ['recovery_token' => $user['lost_password']])->serialize(), HttpStatus::OK);
     }
 
     /**
@@ -166,7 +166,7 @@ abstract class BaseAuth extends Controller
         $user->{'lost_password'} = null;
         $user->save();
 
-        return response()->json(PopoMapper::alertResponse(HttpStatus::OK, 'Password telah berhasil dirubah', ['credential' => $user['credential'], 'role' => $user['role']]), HttpStatus::OK);
+        return response()->json(PopoMapper::alertResponse(HttpStatus::OK, 'Password telah berhasil dirubah', ['credential' => $user['credential'], 'role' => $user['role']])->serialize(), HttpStatus::OK);
     }
 
     /**
@@ -179,7 +179,7 @@ abstract class BaseAuth extends Controller
         /** @noinspection PhpUndefinedMethodInspection */
         $auth->logout(true);
 
-        return response()->json(PopoMapper::alertResponse(HttpStatus::OK, 'Logout Successful'), HttpStatus::OK);
+        return response()->json(PopoMapper::alertResponse(HttpStatus::OK, 'Logout Successful')->serialize(), HttpStatus::OK);
     }
 
     /**
@@ -192,7 +192,7 @@ abstract class BaseAuth extends Controller
             'token' => $token->get(),
             'type' => 'bearer',
             'expires' => $this->jwtFactory->getTTL()
-        ]), HttpStatus::OK);
+        ])->serialize(), HttpStatus::OK);
     }
 
     /**

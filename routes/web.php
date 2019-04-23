@@ -14,17 +14,18 @@
 
 use App\Model\Popo\PopoMapper;
 use App\Model\Util\HttpStatus;
+use Laravel\Lumen\Routing\Router;
 
-/** @var \Laravel\Lumen\Routing\Router $router */
+/** @var Router $router */
 $router->get('/', function () use ($router) {
     return response()->json(PopoMapper::jsonResponse(HttpStatus::OK, '', [
         'version' => $router->app->version()
-    ]), HttpStatus::OK);
+    ])->serialize(), HttpStatus::OK);
 });
 $router->post('/', ['middleware' => ['c.jwt.auth'], function () use ($router) {
     return response()->json(PopoMapper::jsonResponse(HttpStatus::OK, '', [
         'version' => $router->app->version()
-    ]), HttpStatus::OK);
+    ])->serialize(), HttpStatus::OK);
 }]);
 
 $router->group(['namespace' => 'Student', 'prefix' => '/student', 'middleware' => ['registered.role']], function () use ($router) {

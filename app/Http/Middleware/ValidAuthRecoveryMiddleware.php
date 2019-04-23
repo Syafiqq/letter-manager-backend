@@ -31,7 +31,7 @@ class ValidAuthRecoveryMiddleware
         $user  = User::where('lost_password', '=', $token)->first();
         if (is_null($user))
         {
-            return response()->json(PopoMapper::alertResponse(HttpStatus::NOT_FOUND, 'Page Not Found'), HttpStatus::NOT_FOUND);
+            return response()->json(PopoMapper::alertResponse(HttpStatus::NOT_FOUND, 'Page Not Found')->serialize(), HttpStatus::NOT_FOUND);
         }
 
         return $next($request);
