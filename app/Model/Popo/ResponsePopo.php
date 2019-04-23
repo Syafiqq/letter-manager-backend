@@ -58,6 +58,8 @@ class ResponsePopo
         {
             $v['level'] = $level;
         }
+
+        return $this;
     }
 
     public function withAlertLevel(string $level): ResponsePopo
@@ -67,6 +69,8 @@ class ResponsePopo
         {
             $v['level'] = $level;
         }
+
+        return $this;
     }
 
     public function withLevel(string $level): ResponsePopo
@@ -82,6 +86,8 @@ class ResponsePopo
         {
             $v['duration'] = $duration;
         }
+
+        return $this;
     }
 }
 
