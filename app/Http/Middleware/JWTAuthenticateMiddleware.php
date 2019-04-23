@@ -48,7 +48,7 @@ class JWTAuthenticateMiddleware extends \Tymon\JWTAuth\Http\Middleware\Authentic
         $payload = $this->auth->getPayload();
         if (!is_null($role) && strtolower($payload->get(ClaimTable::ROLE)) != strtolower($role))
         {
-            return response()->json(PopoMapper::alertResponse(HttpStatus::NOT_FOUND, 'You dont have Authorization to handle this request')->serialize(), HttpStatus::UNAUTHORIZED);
+            return response()->json(PopoMapper::alertResponse(HttpStatus::NOT_FOUND, 'You dont have Authorization to handle this request')->withAlertLevel('warning')->serialize(), HttpStatus::UNAUTHORIZED);
         }
         try
         {
