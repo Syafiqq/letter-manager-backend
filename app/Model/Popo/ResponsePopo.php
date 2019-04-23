@@ -35,7 +35,7 @@ class ResponsePopo
         $this->alert  = $alert;
     }
 
-    public function serialize(): array
+    public function __sleep(): array
     {
         return [
             'code' => $this->code,
@@ -44,6 +44,11 @@ class ResponsePopo
             'notify' => $this->notify,
             'alert' => $this->alert
         ];
+    }
+
+    public function serialize(): array
+    {
+        return $this->__sleep();
     }
 }
 
