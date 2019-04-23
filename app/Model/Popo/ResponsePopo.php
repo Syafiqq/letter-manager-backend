@@ -53,6 +53,7 @@ class ResponsePopo
 
     public function withNotifyLevel(string $level): ResponsePopo
     {
+        $level = strtolower($level);
         foreach ($this->notify as $v)
         {
             $v['level'] = $level;
@@ -61,6 +62,7 @@ class ResponsePopo
 
     public function withAlertLevel(string $level): ResponsePopo
     {
+        $level = strtolower($level);
         foreach ($this->alert as $v)
         {
             $v['level'] = $level;
