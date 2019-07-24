@@ -11,6 +11,9 @@ use Laravel\Lumen\Auth\Authorizable;
 use Ramsey\Uuid\Uuid;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
+/**
+ * @method static where(string $string, string $string1, array|string|null $token)
+ */
 class User extends Model implements AuthenticatableContract, AuthorizableContract, JWTSubject
 {
     use Authenticatable, Authorizable;

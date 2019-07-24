@@ -1,4 +1,7 @@
 <?php
+
+use Ramsey\Uuid\Uuid;
+
 /**
  * This <letter-manager-backend> project created by :
  * Name         : syafiq
@@ -16,7 +19,7 @@ class UuidTest extends TestCase
         {
             try
             {
-                echo \Ramsey\Uuid\Uuid::uuid1()->toString() . "\n";
+                echo Uuid::uuid1()->toString() . "\n";
             }
             catch (Exception $e)
             {
@@ -32,7 +35,7 @@ class UuidTest extends TestCase
         {
             try
             {
-                echo \Ramsey\Uuid\Uuid::uuid4()->toString() . "\n";
+                echo Uuid::uuid4()->toString() . "\n";
             }
             catch (Exception $e)
             {

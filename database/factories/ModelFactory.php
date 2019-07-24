@@ -11,6 +11,10 @@
 |
 */
 
+/** @var Factory $factory */
+
+use Illuminate\Database\Eloquent\Factory;
+
 $factory->define(App\Eloquent\User::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->name,
