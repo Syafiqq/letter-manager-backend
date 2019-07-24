@@ -79,10 +79,16 @@ class LetterController extends Controller
             $letter->{'issuer'}     = $this->guard->user()->getAuthIdentifier();
             $letter->save();
 
-            return response()->json(PopoMapper::alertResponse(HttpStatus::OK, 'Letter added successfully')->withAlertLevel(ResponseKind::SUCCESS)->serialize(), HttpStatus::OK);
+            return response()
+                ->json(PopoMapper::alertResponse(HttpStatus::OK, 'Letter added successfully')
+                    ->withAlertLevel(ResponseKind::SUCCESS)
+                    ->serialize(), HttpStatus::OK);
         }
 
-        return response()->json(PopoMapper::alertResponse(HttpStatus::UNPROCESSABLE_ENTITY, 'There was error when uploading files')->withAlertLevel(ResponseKind::WARNING)->serialize(), HttpStatus::UNPROCESSABLE_ENTITY);
+        return response()
+            ->json(PopoMapper::alertResponse(HttpStatus::UNPROCESSABLE_ENTITY, 'There was error when uploading files')
+                ->withAlertLevel(ResponseKind::WARNING)
+                ->serialize(), HttpStatus::UNPROCESSABLE_ENTITY);
     }
 }
 

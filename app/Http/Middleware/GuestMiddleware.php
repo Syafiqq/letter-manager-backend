@@ -46,7 +46,10 @@ class GuestMiddleware extends Check
             {
                 if ($this->auth->parseToken()->authenticate() != null)
                 {
-                    return response()->json(PopoMapper::alertResponse(HttpStatus::FORBIDDEN, 'Can\'t access this page')->withAlertLevel(ResponseKind::DANGER)->serialize(), HttpStatus::FORBIDDEN);
+                    return response()
+                        ->json(PopoMapper::alertResponse(HttpStatus::FORBIDDEN, 'Can\'t access this page')
+                            ->withAlertLevel(ResponseKind::DANGER)
+                            ->serialize(), HttpStatus::FORBIDDEN);
                 }
             }
             catch (Exception $_)

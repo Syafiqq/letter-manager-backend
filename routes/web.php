@@ -18,14 +18,18 @@ use Laravel\Lumen\Routing\Router;
 
 /** @var Router $router */
 $router->get('/', function () use ($router) {
-    return response()->json(PopoMapper::jsonResponse(HttpStatus::OK, '', [
-        'version' => $router->app->version()
-    ])->serialize(), HttpStatus::OK);
+    return response()
+        ->json(PopoMapper::jsonResponse(HttpStatus::OK, '', [
+            'version' => $router->app->version()
+        ])
+            ->serialize(), HttpStatus::OK);
 });
 $router->post('/', ['middleware' => ['c.jwt.auth'], function () use ($router) {
-    return response()->json(PopoMapper::jsonResponse(HttpStatus::OK, '', [
-        'version' => $router->app->version()
-    ])->serialize(), HttpStatus::OK);
+    return response()
+        ->json(PopoMapper::jsonResponse(HttpStatus::OK, '', [
+            'version' => $router->app->version()
+        ])
+            ->serialize(), HttpStatus::OK);
 }]);
 
 $router->group(['namespace' => 'Student', 'prefix' => '/student', 'middleware' => ['registered.role']], function () use ($router) {

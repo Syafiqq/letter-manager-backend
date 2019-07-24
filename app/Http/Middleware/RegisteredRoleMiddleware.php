@@ -34,7 +34,9 @@ class RegisteredRoleMiddleware
         $role = strtolower($role);
         if (empty($role) || !in_array($role, User::roles))
         {
-            return response()->json(PopoMapper::alertResponse(HttpStatus::NOT_FOUND, 'Page Not Found')->serialize(), HttpStatus::NOT_FOUND);
+            return response()
+                ->json(PopoMapper::alertResponse(HttpStatus::NOT_FOUND, 'Page Not Found')
+                    ->serialize(), HttpStatus::NOT_FOUND);
         }
         $request->request->set('role', $role);
 
