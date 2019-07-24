@@ -13,6 +13,7 @@ namespace App\Http\Controllers\Student;
 use App\Eloquent\Letter;
 use App\Http\Controllers\Controller;
 use App\Model\Popo\PopoMapper;
+use App\Model\Popo\ResponseKind;
 use App\Model\Util\HttpStatus;
 use Carbon\Carbon;
 use Exception;
@@ -78,10 +79,10 @@ class LetterController extends Controller
             $letter->{'issuer'}     = $this->guard->user()->getAuthIdentifier();
             $letter->save();
 
-            return response()->json(PopoMapper::alertResponse(HttpStatus::OK, 'Letter added successfully')->withAlertLevel('success')->serialize(), HttpStatus::OK);
+            return response()->json(PopoMapper::alertResponse(HttpStatus::OK, 'Letter added successfully')->withAlertLevel(ResponseKind::SUCCESS)->serialize(), HttpStatus::OK);
         }
 
-        return response()->json(PopoMapper::alertResponse(HttpStatus::UNPROCESSABLE_ENTITY, 'There was error when uploading files')->withAlertLevel('warning')->serialize(), HttpStatus::UNPROCESSABLE_ENTITY);
+        return response()->json(PopoMapper::alertResponse(HttpStatus::UNPROCESSABLE_ENTITY, 'There was error when uploading files')->withAlertLevel(ResponseKind::WARNING)->serialize(), HttpStatus::UNPROCESSABLE_ENTITY);
     }
 }
 

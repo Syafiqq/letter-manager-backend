@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use App\Model\Popo\PopoMapper;
+use App\Model\Popo\ResponseKind;
 use App\Model\Util\HttpStatus;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -62,12 +63,12 @@ class Handler extends ExceptionHandler
                     return response()->json(PopoMapper::alertResponse(HttpStatus::NOT_FOUND, 'Resource Not Found')->serialize(), HttpStatus::NOT_FOUND);
                 case ValidationException::class :
                     /** @var ValidationException $exception */
-                    return response()->json(PopoMapper::jsonResponse($statusCode, strlen($exception->getMessage()) < 1 ? 'Invalid Data' : $exception->getMessage(), $exception->errors(), [], ['Invalid form request'])->withLevel('danger')->serialize(), $statusCode);
+                    return response()->json(PopoMapper::jsonResponse($statusCode, strlen($exception->getMessage()) < 1 ? 'Invalid Data' : $exception->getMessage(), $exception->errors(), [], ['Invalid form request'])->withLevel(ResponseKind::DANGER)->serialize(), $statusCode);
                 case AuthorizationException::class :
                     /** @var AuthorizationException $exception */
-                    return response()->json(PopoMapper::alertResponse(HttpStatus::NOT_FOUND, strlen($exception->getMessage()) < 1 ? 'Unknown Request' : $exception->getMessage())->withAlertLevel('danger')->serialize(), HttpStatus::FORBIDDEN);
+                    return response()->json(PopoMapper::alertResponse(HttpStatus::NOT_FOUND, strlen($exception->getMessage()) < 1 ? 'Unknown Request' : $exception->getMessage())->withAlertLevel(ResponseKind::DANGER)->serialize(), HttpStatus::FORBIDDEN);
                 default :
-                    return response()->json(PopoMapper::alertResponse($statusCode, strlen($exception->getMessage()) < 1 ? 'Unknown Request' : $exception->getMessage())->withAlertLevel('danger')->serialize(), $statusCode);
+                    return response()->json(PopoMapper::alertResponse($statusCode, strlen($exception->getMessage()) < 1 ? 'Unknown Request' : $exception->getMessage())->withAlertLevel(ResponseKind::DANGER)->serialize(), $statusCode);
             }
         }
         else

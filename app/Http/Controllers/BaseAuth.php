@@ -14,6 +14,7 @@ use App\Eloquent\Coupon;
 use App\Eloquent\Session;
 use App\Eloquent\User;
 use App\Model\Popo\PopoMapper;
+use App\Model\Popo\ResponseKind;
 use App\Model\Util\ClaimTable;
 use App\Model\Util\HttpStatus;
 use Exception;
@@ -56,7 +57,7 @@ abstract class BaseAuth extends Controller
      */
     public function postLogin(Request $request)
     {
-        $response = response()->json(PopoMapper::alertResponse(HttpStatus::NOT_FOUND, 'Unknown User')->withAlertLevel('warning')->serialize(), HttpStatus::UNAUTHORIZED);
+        $response = response()->json(PopoMapper::alertResponse(HttpStatus::NOT_FOUND, 'Unknown User')->withAlertLevel(ResponseKind::WARNING)->serialize(), HttpStatus::UNAUTHORIZED);
 
         $credentials = $this->validate($request, [
             'credential' => 'bail|required|max:100',
@@ -69,7 +70,7 @@ abstract class BaseAuth extends Controller
         $user = User::where('credential', $credentials['credential'])->where('role', $credentials['role'])->first();
         if (!$user)
         {
-            return response()->json(PopoMapper::alertResponse(HttpStatus::BAD_REQUEST, 'Cannot find user with provided credential')->withAlertLevel('warning')->serialize(), HttpStatus::BAD_REQUEST);
+            return response()->json(PopoMapper::alertResponse(HttpStatus::BAD_REQUEST, 'Cannot find user with provided credential')->withAlertLevel(ResponseKind::WARNING)->serialize(), HttpStatus::BAD_REQUEST);
         }
         if (!$this->hashManager->check($credentials['password'], $user->{'password'}))
         {
@@ -117,7 +118,7 @@ abstract class BaseAuth extends Controller
         $user->{'password'}   = $this->hashManager->make($credentials['password'], []);
         $user->save();
 
-        return response()->json(PopoMapper::alertResponse(HttpStatus::OK, 'User register successfully')->withAlertLevel('success')->serialize(), HttpStatus::OK);
+        return response()->json(PopoMapper::alertResponse(HttpStatus::OK, 'User register successfully')->withAlertLevel(ResponseKind::SUCCESS)->serialize(), HttpStatus::OK);
     }
 
     /**
@@ -166,7 +167,7 @@ abstract class BaseAuth extends Controller
         $user->{'lost_password'} = null;
         $user->save();
 
-        return response()->json(PopoMapper::alertResponse(HttpStatus::OK, 'Password telah berhasil dirubah', ['credential' => $user['credential'], 'role' => $user['role']])->withAlertLevel('success')->serialize(), HttpStatus::OK);
+        return response()->json(PopoMapper::alertResponse(HttpStatus::OK, 'Password telah berhasil dirubah', ['credential' => $user['credential'], 'role' => $user['role']])->withAlertLevel(ResponseKind::SUCCESS)->serialize(), HttpStatus::OK);
     }
 
     /**
@@ -179,7 +180,7 @@ abstract class BaseAuth extends Controller
         /** @noinspection PhpUndefinedMethodInspection */
         $auth->logout(true);
 
-        return response()->json(PopoMapper::alertResponse(HttpStatus::OK, 'Logout Successful')->withAlertLevel('success')->serialize(), HttpStatus::OK);
+        return response()->json(PopoMapper::alertResponse(HttpStatus::OK, 'Logout Successful')->withAlertLevel(ResponseKind::SUCCESS)->serialize(), HttpStatus::OK);
     }
 
     /**
@@ -192,7 +193,7 @@ abstract class BaseAuth extends Controller
             'token' => $token->get(),
             'type' => 'bearer',
             'expires' => $this->jwtFactory->getTTL()
-        ])->withAlertLevel('success')->serialize(), HttpStatus::OK);
+        ])->withAlertLevel(ResponseKind::SUCCESS)->serialize(), HttpStatus::OK);
     }
 
     /**

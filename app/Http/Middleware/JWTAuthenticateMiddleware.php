@@ -10,6 +10,7 @@
 namespace App\Http\Middleware;
 
 use App\Model\Popo\PopoMapper;
+use App\Model\Popo\ResponseKind;
 use App\Model\Util\ClaimTable;
 use App\Model\Util\HttpStatus;
 use App\Model\Util\Session;
@@ -48,7 +49,7 @@ class JWTAuthenticateMiddleware extends \Tymon\JWTAuth\Http\Middleware\Authentic
         $payload = $this->auth->getPayload();
         if (!is_null($role) && strtolower($payload->get(ClaimTable::ROLE)) != strtolower($role))
         {
-            return response()->json(PopoMapper::alertResponse(HttpStatus::NOT_FOUND, 'You dont have Authorization to handle this request')->withAlertLevel('warning')->serialize(), HttpStatus::UNAUTHORIZED);
+            return response()->json(PopoMapper::alertResponse(HttpStatus::NOT_FOUND, 'You dont have Authorization to handle this request')->withAlertLevel(ResponseKind::WARNING)->serialize(), HttpStatus::UNAUTHORIZED);
         }
         try
         {

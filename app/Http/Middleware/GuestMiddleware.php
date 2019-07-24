@@ -11,6 +11,7 @@ namespace App\Http\Middleware;
 
 
 use App\Model\Popo\PopoMapper;
+use App\Model\Popo\ResponseKind;
 use App\Model\Util\HttpStatus;
 use Closure;
 use Exception;
@@ -45,7 +46,7 @@ class GuestMiddleware extends Check
             {
                 if ($this->auth->parseToken()->authenticate() != null)
                 {
-                    return response()->json(PopoMapper::alertResponse(HttpStatus::FORBIDDEN, 'Can\'t access this page')->withAlertLevel('danger')->serialize(), HttpStatus::FORBIDDEN);
+                    return response()->json(PopoMapper::alertResponse(HttpStatus::FORBIDDEN, 'Can\'t access this page')->withAlertLevel(ResponseKind::DANGER)->serialize(), HttpStatus::FORBIDDEN);
                 }
             }
             catch (Exception $_)
