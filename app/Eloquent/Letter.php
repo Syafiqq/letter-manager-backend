@@ -9,8 +9,6 @@
 
 namespace App\Eloquent;
 
-use Illuminate\Database\Eloquent\Model;
-
 class Letter extends Model
 {
     const table = 'letters';
