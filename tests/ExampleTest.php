@@ -1,5 +1,8 @@
 <?php
 
+use Laravel\Lumen\Testing\DatabaseMigrations;
+use Laravel\Lumen\Testing\DatabaseTransactions;
+
 class ExampleTest extends TestCase
 {
     /**
@@ -15,6 +18,8 @@ class ExampleTest extends TestCase
         $this->assertIsArray($content);
         $this->assertArrayHasKey('data', $content);
         $this->assertArrayHasKey('version', $content['data']);
-        $this->assertEquals($this->app->version(), $content['data']['version']);
+        $this->assertEquals(
+            $this->app->version(), $content['data']['version']
+        );
     }
 }
