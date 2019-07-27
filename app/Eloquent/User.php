@@ -56,6 +56,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'gender',
         'avatar'
     ];
+
     /**
      * The attributes excluded from the model's JSON form.
      *
@@ -65,6 +66,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'password',
         'lost_password'
     ];
+
     /**
      * @var string
      */
@@ -115,7 +117,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     /**
      * Set the token value for the "remember me" session.
      *
-     * @param  string $value
+     * @param string $value
      * @return void
      */
     public function setRememberToken($value)
