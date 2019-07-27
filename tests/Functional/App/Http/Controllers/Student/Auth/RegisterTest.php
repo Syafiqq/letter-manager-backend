@@ -160,7 +160,13 @@ class RegisterTest extends TestCase
 
     public static function _removeNewUser()
     {
-        User::where('credential', self::_getNewUserCredential())->delete();
+        try
+        {
+            User::where('credential', self::_getNewUserCredential())->delete();
+        }
+        catch (Exception $e)
+        {
+        }
     }
 }
 

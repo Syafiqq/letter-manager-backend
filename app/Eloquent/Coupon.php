@@ -101,6 +101,8 @@ class Coupon extends Model
                     return 'Student';
             }
         }
+
+        return null;
     }
 }
 

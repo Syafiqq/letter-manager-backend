@@ -56,7 +56,7 @@ class Handler extends ExceptionHandler
         {
             $statusCode =
                 method_exists($exception, 'getStatusCode') ? $exception->getStatusCode() :
-                    (property_exists($exception, 'status') ? $exception->status : HttpStatus::INTERNAL_SERVER_ERROR);
+                    (property_exists($exception, 'status') ? $exception->{'status'} : HttpStatus::INTERNAL_SERVER_ERROR);
             switch (get_class($exception))
             {
                 case ModelNotFoundException::class :

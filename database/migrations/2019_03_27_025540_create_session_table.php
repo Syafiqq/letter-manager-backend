@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpUndefinedMethodInspection */
 
 use App\Eloquent\Session;
 use Illuminate\Database\Migrations\Migration;
